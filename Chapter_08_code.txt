@@ -1,0 +1,533 @@
+Installing Node.js
+===================================
+
+console.log("NodeJs example");
+
+var numbers= [100,20,29,96,55];
+
+var sum=0;
+for(i=0; i< numbers.length; i++)
+{
+    sum += numbers[i];
+}
+
+console.log("total sum is "+ sum);
+
+Simple Console Application using Node.js
+==================================================
+
+//cars.js
+
+module.exports.cars = [
+{name:"Honda Accord" , model:"2016", engine: "V6"}, 
+{name:"BMW X6", model:"2015", engine: "V8"}, 
+{name:"Mercedez Benz",model:"2016", engine:"V12"}
+];
+
+
+//app.js
+var cars = require('./cars.js');
+console.log(cars);
+
+///Modified version
+-------------------------------------------------
+
+//cars.js
+module.exports = function () {
+	this.carsList = 	
+	[
+		{ name: "Honda Accord" , model: "2016", engine: "V6" }, 
+		{ name: "BMW X6", model: "2015", engine: "V8" }, 
+		{ name: "Mercedez Benz", model: "2016", engine: "V12" }
+	];
+};
+
+
+
+///app.js
+var cars = require('./cars.js');
+var c = new cars();
+var carsList = c.carsList;
+for (i = 0; i < carsList.length; i++) { 
+	console.log(carsList[i].name);
+}
+
+
+Web Applications with Node.js
+=====================================================
+
+Creating blank Node.js application
+-----------------------------------------------------
+
+//Initialized http object
+var http = require('http');
+
+//declared port
+var port = process.env.port || 1337;
+
+//Initialized http server object and use res.write() to send actual response content
+var httpServer= http.createServer(function (req, res) {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.write('Hello World\n');
+    res.end();
+});
+
+//listening for incoming request
+httpServer.listen(port);
+ 
+Using Express Framework for Web Application in Node.js 
+==============================================================
+
+//Initialized http object
+var http = require('http');
+
+//adding express dependency
+var express = require('express');
+
+//creating express application
+var expressApp = express();
+
+//Configuring root call where '/' represents root path of the URL
+expressApp.get("/", function (req, res) {
+    res.send("<html><body><div>Hello World</div></body></html>");
+});
+
+
+//declared port
+var port = process.env.port || 1337;
+
+//Initialized http server object and use res.write() to send actual response content
+var httpServer = http.createServer(expressApp);
+
+//listening for incoming request
+httpServer.listen(port);
+
+
+EJS View Engine
+=====================================
+
+//Initialized http object
+var http = require('http');
+
+//adding express dependency
+var express = require('express');
+
+//creating express application
+var expressApp = express();
+
+//Set jade for Node.js application
+expressApp.set('view engine', 'ejs') 
+
+
+//Configuring root call where '/' represents root path of the URL
+expressApp.get("/", function (req, res) {
+    res.render("ejsviews/home/index");
+});
+
+
+//declared port
+var port = process.env.port || 1337;
+
+//Initialized http server object and use res.write() to send actual response content
+var httpServer = http.createServer(expressApp);
+
+//listening for incoming request
+httpServer.listen(port);
+
+
+
+//Modified
+
+//Configuring root call where '/' represents root path of the URL
+expressApp.get("/", function (req, res) {
+    res.render("ejsviews/home/index", { appName: "EJSDemo", message: "This is our first EJS view engine example!" });
+});
+
+
+//Index.ejs
+<html>
+ <body>
+   <h1> <%= appName %> </h1>
+  <p> <%= message %></p>
+ </body>
+</html>
+
+
+//Ejs-locals
+-------------------------------------
+//Initialized http object
+var http = require('http');
+
+//adding express dependency
+var express = require('express');
+var ejsLocal = require('ejs-locals');
+//creating express application
+var expressApp = express();
+
+
+//Add engine that supports master pages
+app.engine('ejs', ejsLocal);
+
+//Set jade for Node.js application
+expressApp.set('view engine', 'ejs');
+
+
+
+Layout.ejs
+---------------------------------
+<html>
+<head>
+  <title> <%= appName %> </title>
+</head>
+<body>
+	<%= body %>
+</body>
+</html>
+
+
+
+index.ejs
+---------------------------------
+
+<% layout('../layout.ejs') -%>
+<h1><%= appName %></h1>
+<p> <%= message %></p>
+
+
+
+Jade View Engine
+=================================================
+
+//adding express dependency
+var express = require('express');
+
+//creating express application
+var expressApp = express();
+
+//Set jade for Node.js application
+expressApp.set('view engine', "jade");
+
+
+
+//Configuring root call where '/' represents root path of the URL
+expressApp.get("/", function (req, res) {
+res.render("home/index", 
+{ 
+appName: "JadeDemo",   
+message: "This is our first Jade view engine example!"
+}
+);
+});
+
+
+
+index.jade
+---------------------
+
+
+doctype
+html
+    body
+        h1= appName
+        p= message
+
+
+static values
+----------------------
+
+
+doctype
+html
+    body
+        h1 Jade App
+        p This is Jade View
+	
+
+
+
+layout.jade
+--------------------------------
+
+doctype html
+html
+  head
+    title Jade App
+  body
+  block contentBlock
+
+
+
+index.jade
+--------------------------------
+
+extends layout
+block contentBlock
+        h1= appName
+        p= message
+
+
+
+Routing in Express Application
+===========================================
+
+expressApp.get("/About", function (req, res) {
+    res.render("ejsviews/home/about");
+});
+
+
+Middleware
+============================================
+
+//Initialized http object
+var http = require('http');
+//adding express dependency
+var express = require('express');
+
+//creating express application
+var expressApp = express();
+
+expressApp.all('/middlewareexample', function (req, res, next) {
+    console.log('Middleware executed now calling next middleware in the pipeline');
+    next(); // pass control to the next handler
+});
+expressApp.all('/middlewareexample', function (req, res) {
+    res.send("<html><body><div>Middleware executed</div></body></html>");    
+});
+
+
+//declared port
+var port = process.env.port || 1337;
+
+//Initialized http server object and use res.write() to send actual response content
+var httpServer = http.createServer(expressApp);
+
+//listening for incoming request
+httpServer.listen(port);
+
+
+
+
+
+Creating Controller
+==================================
+
+//HomeController.js
+
+(function (homeController) {
+    homeController.load = function (expressApp) {
+        expressApp.get('/', function (req, res) {
+            res.render("ejsviews/home/index", {appName: "EJS Application", message:"EJS MVC Implementation"})
+        });
+    };
+})(module.exports);
+
+
+
+
+EJSServer.js
+-----------------------------------------------
+
+//Initialized http object
+var http = require('http');
+
+//adding express dependency
+var express = require('express');
+
+//adding ejs locals
+var ejsLocal = require('ejs-locals');
+
+//creating express application
+var expressApp = express();
+
+//Add engine that supports master pages
+expressApp.engine('ejs', ejsLocal);
+
+//Set jade for Node.js application
+expressApp.set('view engine', 'ejs');
+
+//Initializing HomeController
+var homeController = require('./Controllers/HomeContoller.js');
+homeController.load(expressApp);
+
+//declared port
+var port = process.env.port || 1337;
+
+//Initialized http server object and use res.write() to send actual response content
+var httpServer = http.createServer(expressApp);
+
+//listening for incoming request
+httpServer.listen(port);
+
+
+
+Creating Data Services
+=====================================================
+
+//ProductsService.js
+
+(function(data){
+    data.getProducts = function () {
+        return [{
+                name: 'Product1',
+                price: 200,
+            }, 
+            {
+                name: 'Product2',
+                price: 500
+            },
+            {
+                name: 'Product3',
+                price: 1000
+            }
+        ];
+    };
+})(module.exports);
+
+
+
+//Home controller
+
+
+(function (homeController) {
+    var productService = require('../DataServices/ProductService');
+
+    homeController.load = function (expressApp) {
+        expressApp.get('/', function (req, res) {
+            var products= productService.getProducts();
+            res.render("ejsviews/home/index", { appName: "EJS Application", message: "EJS MVC Implementation", data: products });
+        });
+    };
+})(module.exports);
+
+
+//Index.ejs
+
+<% layout('../layout.ejs') -%>
+<h1><%= appName %></h1>
+
+<p> <%= message %></p>
+
+<div>
+
+ <% data.forEach(function(product) { %>
+   <li><%= product.name %> - <%= product.price %></li>
+ <% }); %>
+
+ </div>
+
+
+Reading Record from Microsoft SQL Server Database
+===========================================================
+
+//DataService.js
+
+(function(data){
+data.getRecords = function (callbackFn) {
+        //loaded SQL object
+        var sql = require('mssql');
+        
+        //database configuration attributes to connect
+        var config = {
+            user: 'sa',
+            password: '123',
+            server: 'ovais-pc', // You can use 'localhost\\instance' to connect to named instance 
+            database: 'products'
+        }
+        
+        var products = null;
+        //Connect to SQL Server returns a promise and on successfull connection executing a query using Request object
+        sql.connect(config).then(function () {
+            new sql.Request().query('select * from products', function (err, recordset) {      
+                callbackFn(recordset);        
+            });
+        });
+        
+        
+     };
+})(module.exports);
+
+
+//HomeController.js
+
+
+(function (homeController) {
+    var productService = require('../DataServices/ProductService');
+
+    homeController.load = function (expressApp) {
+        expressApp.get('/', function (req, res) {
+            var products = productService.getRecords(function (products) {
+                console.dir(products);
+                res.render("ejsviews/home/index", { appName: "EJS Application", message: "EJS MVC Implementation", data: products });
+            });
+        });
+    };
+})(module.exports);
+
+
+//Index.ejs
+
+<% layout('../layout.ejs') -%>
+<h1><%= appName %></h1>
+<p> <%= message %></p>
+
+<table>
+<th> 
+<td> Product Name </td>
+<td>  Description </td>
+<td> Price </td>
+</th>
+ <% data.forEach(function(product) { %>
+	<tr> <td><%= product.Name %> </td> <td> <%= product.Description %> </td><td> <%= product.Price %> </td></tr>
+ <% }); %>
+</table>
+
+
+
+Creating Record in Microsoft SQL Server Database
+========================================================
+
+//esjserver.js
+
+var bodyParser = require('body-parser');
+
+expressApp.use(new bodyParser());
+
+//HomeController.js
+
+    expressApp.post('/', function (req, res) {
+            console.log(req.body.txtName);
+           productService.saveProduct(req.body.txtName, req.body.txtDescription, req.body.txtPrice, function (result) {
+                res.send("Record saved successfully");
+            });
+        });
+
+
+
+//DataService.js
+
+var bodyParser = require('body-parser');
+
+expressApp.use(new bodyParser());
+
+Once this is added, we can modify the HomeController.js and define a POST method that will be called once the form is submitted. 
+    expressApp.post('/', function (req, res) {
+            console.log(req.body.txtName);
+           productService.saveProduct(req.body.txtName, req.body.txtDescription, req.body.txtPrice, function (result) {
+                res.send("Record saved successfully");
+            });
+        });
+
+
+//Index.ejs
+
+var bodyParser = require('body-parser');
+
+expressApp.use(new bodyParser());
+
+Once this is added, we can modify the HomeController.js and define a POST method that will be called once the form is submitted. 
+    expressApp.post('/', function (req, res) {
+            console.log(req.body.txtName);
+           productService.saveProduct(req.body.txtName, req.body.txtDescription, req.body.txtPrice, function (result) {
+                res.send("Record saved successfully");
+            });
+        });

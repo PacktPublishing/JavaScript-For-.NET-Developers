@@ -1,0 +1,660 @@
+Support for classes and modules
+--------------------------------
+
+class Person {
+    private personId: string = '';
+    private personName: string = '';
+    private dateOfBirth: Date;
+    constructor() {
+    }
+    getPersonName(): string {`
+        return this.personName;
+    }
+    setPersonName(value): void {
+        this.personName = value;
+    }
+}
+
+Static Type Checking
+----------------------------
+
+class Person {
+    constructor(name: string) {
+    }
+}
+
+class Employee extends Person{
+    constructor() {
+        super(2); //error 
+    }
+}
+
+Classes and Interfaces
+---------------------------------------
+
+interface IShape {
+    shapeName: string;
+    draw();
+}
+class TodoService implements IShape  {
+    constructor(private http: Http) {
+        this.shapeName = "Square";
+    }
+
+    shapeName: string;
+
+    draw() {
+        alert("this is " + this.shapeName);
+    }
+}
+
+
+Deriving classes and interfaces
+----------------------------------------------
+
+interface IPerson {
+    id: number;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: Date;
+}
+
+interface IEmployee extends IPerson{
+    empCode: string;
+    designation: string;
+}
+
+class Person implements IPerson {
+    id: number;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: Date;
+}
+
+class Employee extends Person implements IEmployee {
+    empCode: string;
+    designation: string;
+}
+
+Generic Classes
+------------------------------------------
+
+class Process<T>{
+    value: T;
+    getTypeInfo(){
+        if (typeof this.value == "string")
+            console.log("Type is a string");
+        else if (typeof this.value == "number")
+            console.log("Type is a number");
+        else alert("type is unknown");
+       
+    }
+}
+
+let pString = new Process<string>();
+pString.getTypeInfo(); //print Type is a string
+let pNumber = new Process<number>();
+pNumber.getTypeInfo(); //print Type is a number
+
+
+Functions
+----------------------------------------------
+
+function concat(x: string, y: string): string {
+    return x +" "+ y; 
+}
+
+function concat(x: string, y: string, z?: string): string {
+    return x + " " + y + " " + z; 
+}
+
+
+Generic Functions
+------------------------------------------------
+
+function process<T>(x: T, y: T): string{
+    if (typeof x == "string")
+        return x + " " + y;
+    else if (typeof x == "number")
+        return "Sum is: "+ x + y ;
+    else 
+        return "Type in unknown";
+}
+
+
+Iterators
+--------------------------------------------------
+
+countries = ['USA', 'UK', 'UAE'];  
+   //this loop will display keys 0, 1, 2
+for (let country in this.countries) {
+       console.log(country);
+}
+//this loop will display values USA, UK, UAE
+for (let country of this.countries) {
+       console.log(country);
+}
+
+
+Angular 2 Architecture
+--------------------------------------------------
+
+    import { Component, View, provide, Inject } from 'angular2/core';
+    import {bootstrap} from 'angular2/platform/browser';
+    import {NotificationComponent} from './notification.component';
+    import {MathComponent} from './servicemanager.component';
+    import {ChildComponent} from './child.component';
+
+    @Component({
+        selector: "my-app",
+        template: `<p>This is a first component</p>`,
+    })  
+    class AppComponent  {
+		
+    }
+    bootstrap(AppComponent);
+
+
+
+Modules
+---------------------------------------------------------
+
+import {Component} from 'angular2/core';
+
+@Component({
+   
+})
+
+
+export class MathService {
+    constructor() {
+    }
+
+public sum(a: number, b: number): number {
+        return a + b;
+    }
+
+    public subtract(a: number, b: number): number {
+        return a - b;
+    }
+
+    public divide(a: number, b: number): number {
+        return a / b;
+    }
+
+    public multiply(a: number, b: number): number {
+        return a * b;
+    } 
+
+} 
+
+
+
+Templates and Selectors
+---------------------------------------------
+
+import { Component, View } from 'angular2/core';
+import {bootstrap} from 'angular2/platform/browser';
+
+@Component({
+    selector: "my-app",
+    template: "<p> {{message}}</p><button (click)='logMessage()'>Log Message</button>"
+})
+class AppComponent {
+    logMessage() {
+        this.message = "Hello World";
+    }
+    message: string = "";
+
+}
+bootstrap(AppComponent);
+
+
+--------------------------------
+
+<html>
+<body>
+	<my-app></my-app>
+</body>
+</html>
+
+
+Using Inputs
+----------------------------------------------
+
+//child.component.ts
+import { Component} from 'angular2/core';
+@Component({
+    selector: 'child',
+    template: `<div> Log to Console: {{logToConsole}}, Show Alert: {{showAlert}}  <button (click)="logMessage()" >Log</button> </div>`,
+    inputs: ['logToConsole', 'showAlert'],
+})
+export class ChildComponent {
+    public logToConsole: boolean;
+    public showAlert: boolean;
+
+    logMessage(message: string) {
+        if (this.logToConsole) {
+            console.log("Console logging is enabled");
+        }
+        if (this.showAlert) {
+            alert("Showing alert message is enabled");
+        }
+        
+    }
+}
+
+----------------------------------
+
+//app.component.ts
+import { Component, View } from 'angular2/core';
+import {bootstrap} from 'angular2/platform/browser';
+import {ChildComponent} from './child.component';
+
+
+@Component({
+    selector: "my-app",
+    template: `<child [logToConsole]=true [showAlert]=true></child>`,
+    directives: [ChildComponent]
+})
+export class AppComponent {
+}
+bootstrap(AppComponent);
+
+
+
+
+
+Using Outputs
+=====================
+
+//child.component.ts
+import { Component, EventEmitter, Output} from 'angular2/core';
+@Component({
+    selector: 'child',
+    template: `<div> Log to Console: {{logToConsole}}, Show Alert: {{showAlert}}  <button (click)="logMessage()" >Log</button> </div>`,
+    inputs: ['logToConsole', 'showAlert']
+})
+export class ChildComponent {
+    public logToConsole: boolean;
+    public showAlert: boolean;
+    @Output() clickLogButton = new EventEmitter();
+    
+    logMessage(message: string) {
+        this.clickLogButton.next("From child");        
+    }
+}
+
+
+-------------------------------------
+//app.component.ts 
+import { Component, View } from 'angular2/core';
+import {bootstrap} from 'angular2/platform/browser';
+import {ChildComponent} from './child.component';
+
+
+@Component({
+    selector: "my-app",
+    template: `<child [logToConsole]=true [showAlert]=true (clickLogButton)="logMessage($event)" ></child>`,
+    directives: [ChildComponent]
+})
+export class AppComponent {
+
+    logMessage(value) {
+        alert(value);
+    }
+}
+bootstrap(AppComponent);
+
+Creating a Simple Hello World Direcive
+------------------------------------------------
+
+import {Component} from 'angular2/core';
+
+@Component({
+    selector: "helloworld",
+    template: "<h1>Hello world</h1>"
+})
+
+export class HelloWorld {
+    
+}
+
+
+-----------------------------------------------------
+
+
+import { Component, View, provide, Inject } from 'angular2/core';
+    import {bootstrap} from 'angular2/platform/browser';
+    import {HelloWorldComponent} from './helloworld.component';
+
+    @Component({
+        selector: "my-app",
+        template: `<helloworld></helloworld>`,
+        directives: [NotificationComponent, HelloWorldComponent],
+    })  
+    export class AppComponent  {
+ 
+    }
+    bootstrap(AppComponent);
+
+Structural Directive
+=================================
+   <div *ngIf="display">
+        <table>
+            <thead>
+                <tr>
+                    <th>
+                        Country
+                    </th>
+                    <th>
+                        Currency
+                    </th>
+                </tr>
+            </thead>
+            <tbody *ngFor="#country of countries">
+                <tr><td>{{country.CountryName}}</td><td>{{country.Currency}}</td></tr>
+            </tbody>
+        </table>
+        </div>
+
+---------------------------------
+
+///<reference path="../../node_modules/angular2/typings/browser.d.ts" />
+import {Component} from 'angular2/core';
+import {Http, Response} from 'angular2/http';
+
+@Component({
+    selector: 'app',
+    templateUrl: 'Countries'
+})
+export class TodoAppComponent {
+    countries = [];
+    display: boolean = true;
+    //constructor
+    constructor(private http: Http) {
+    }
+
+    //Page Initialized Event Handler
+    ngOnInit() {
+        this.getCountries();
+    }
+    getCountries() {
+        this.http.get("http://localhost:5000/api/todo").map((res: Response) => res.json())
+            .subscribe(data => {
+                this.countries = data;
+            },
+            err => console.log(err),
+            () => console.log("done")
+            );
+    }
+
+}
+
+
+Attribute Directive
+====================================
+import { Directive, ElementRef, Input } from 'angular2/core';
+@Directive({ selector: '[myFont]' })
+export class FontDirective {
+    constructor(el: ElementRef) {
+        el.nativeElement.style.fontStyle = 'italic';
+    }
+}
+
+
+---------------------------------------
+
+<p myFont>myFont is an Attribute directive</p>
+
+Providers
+------------------------------------------------------------
+import { Component } from 'angular2/core';
+@Component({})
+
+export class MathComponent {
+    
+    public sum(a: number, b: number) : number{
+        return a + b;
+    }
+    public divide(a: number, b: number): number {
+        return a / b;
+    }3
+    public subtract(a: number, b: number): number {
+        return a - b;
+    }
+    public multiply(a: number, b: number): number {
+        return a * b;
+    }
+
+}
+
+---------------------------------------------------------------
+
+
+import { Component, View } from 'angular2/core';
+import {bootstrap} from 'angular2/platform/browser';
+import {MathComponent} from './servicemanager.component';
+
+    @Component({
+        selector: "my-app",
+        template: "<button (click)="add()" >Log</button>",
+        providers: [MathComponent]
+    })  
+    export class AppComponent  {
+
+        obj: MathComponent;
+
+        constructor(mathComponent: MathComponent) {
+            this.obj = mathComponent;
+        }
+
+       public add() {
+            console.log(this.obj.sum(1, 2));
+        }
+
+    }
+    bootstrap(AppComponent);
+
+
+------------------------------------------------------------------------
+
+    import { Component, View, provide, Inject } from 'angular2/core';
+    import {bootstrap} from 'angular2/platform/browser';
+    import {MathComponent} from './servicemanager.component';
+
+    @Component({
+        selector: "my-app",
+        template: `button (click)="logMessage()" >Log</button>`,
+        providers: [MathComponent, provide('SampleText', {useValue: 'Sample Value'})]
+    })  
+    export class AppComponent  {
+
+        obj: MathComponent;
+        Val: string;
+        constructor(mathComponent: MathComponent, @Inject('SampleText') value) {
+            this.obj = mathComponent;
+            this.Val = value;
+        }
+            	
+    public logMessage() {
+            alert(this.kVal);
+        }	
+    }
+    bootstrap(AppComponent);
+
+
+
+Dependency Injection in Angular 2
+------------------------------------------------------------------
+
+ import { Component} from 'angular2/core';
+    import {bootstrap} from 'angular2/platform/browser';
+    import {MathComponent} from './servicemanager.component';
+    import {ChildComponent} from './child.component';
+
+    @Component({
+        selector: "my-app",
+        template: `<button (click)="callChildComponentMethod()"     >Log</button>`,
+        providers: [MathComponent, ChildComponent]
+    })  
+    export class AppComponent  {
+
+        childObj: ChildComponent;
+
+       constructor(childComponent: ChildComponent) {
+       this.childObj = childComponent;
+    	
+    	}
+
+        public callChildComponentMethod() {
+            this.childObj.addNumbers(1, 2);   
+           
+        }
+    }
+    bootstrap(AppComponent);
+
+------------------------------------------------------------------------------
+import { Component } from 'angular2/core';
+@Component({})
+
+export class MathComponent {
+    
+    public sum(a: number, b: number) : number{
+        return a + b;
+    }
+    public divide(a: number, b: number): number {
+        return a / b;
+    }
+    public subtract(a: number, b: number): number {
+        return a - b;
+    }
+    public multiply(a: number, b: number): number {
+        return a * b;
+    }
+
+}
+
+--------------------------------------------------------------------------------
+import {Component} from 'angular2/core';
+import {MathComponent} from './servicemanager.component';
+
+@Component({
+    selector: 'child-app',
+    template: '<h1>Hello World</h1>'
+})
+
+export class ChildComponent {
+
+    obj: MathComponent;
+
+    constructor(mathComponent: MathComponent) {
+        this.obj = mathComponent;
+    } 
+
+    public addNumbers(a: number, b: number) {
+        alert(this.obj.sum(a, b));
+    }     
+   
+}
+
+Routing in Angular 
+-------------------------------------------------------------------------------
+
+import {Component} from 'angular2/core';
+import {RouteConfig, ROUTER_DIRECTIVES} from 'angular2/router';
+import {Page1Component} from './page1.component';
+import {Page2Component} from './page2.component';
+
+@Component({    
+    selector: "my-app",
+    template: `{{name}}
+              <a [routerLink]="['Page2']">Page 2</a>
+              <router-outlet></router-outlet>`,
+    directives: [ROUTER_DIRECTIVES],
+})
+
+@RouteConfig([
+        { path: '/', name: 'Page1', component: Page1Component, useAsDefault:true },
+        { path: '/page2', name: 'Page2', component: Page2Component }]
+)
+export class AppComponent {
+}
+
+
+Page 1 Component
+-----------------------------------------------------
+import {Component} from 'angular2/core';
+
+@Component({
+    template:'<h1>Page1 Content</h1>'
+})
+
+export class Page1Component {
+}
+
+
+Page 2 Component
+-------------------------------------------------------
+
+import {Component} from 'angular2/core';
+
+@Component({
+    template: '<h1>Page2 Content</h1>'
+})
+
+export class Page2Component {
+}
+
+Creating TodoServiceApp project
+=====================================
+
+"dependencies": {
+    "Microsoft.NETCore.App": {
+      "version": "1.0.0-rc2-3002702",
+      "type": "platform"
+    },
+    "Microsoft.AspNetCore.Server.IISIntegration": "1.0.0-rc2-final",
+    "Microsoft.AspNetCore.Server.Kestrel": "1.0.0-rc2-final",
+    "Common": "1.0.0-*"
+   }
+
+Install Entity Framework
+======================================
+
+"dependencies": {
+    "Microsoft.NETCore.App": {
+      "version": "1.0.0-rc2-3002702",
+      "type": "platform"
+    },
+    "Microsoft.AspNetCore.Server.IISIntegration": "1.0.0-rc2-final",
+    "Microsoft.AspNetCore.Server.Kestrel": "1.0.0-rc2-final",
+    "common": "1.0.0-*",
+    "Microsoft.AspNetCore.Mvc": "1.0.0-rc2-final",
+    "Microsoft.EntityFrameworkCore.SqlServer": "1.0.0-rc2-final",
+    "Microsoft.EntityFrameworkCore.Tools": {
+      "type": "build",
+      "version": "1.0.0-preview1-final"
+    }
+}
+
+
+Running Database Migration
+===============================
+
+"tools": {
+    "Microsoft.AspNetCore.Server.IISIntegration.Tools": {
+      "version": "1.0.0-preview1-final",
+      "imports": "portable-net45+win8+dnxcore50"
+    },
+    "Microsoft.EntityFrameworkCore.Tools": {
+      "imports": [ "portable-net451+win8" ],
+      "version": "1.0.0-preview1-final"
+    }
+  }, 
+
+
+---------------------------------
+dotnet ef migrations add Initial
+--------------------------------
+dotnet ef database update –verbose 

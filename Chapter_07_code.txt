@@ -1,0 +1,276 @@
+Abstract Factory Pattern
+=============================
+
+<script>
+    //Shape Factory to create instances of Circle and Square
+    var ShapeFactory = function() {
+        var shape;
+        this.createShape = function (shapeType) {
+            if (shapeType === "circle") {
+                return new CircleShape();
+            }
+            else if (shapeType === "square") {
+                return new SquareShape();
+            }
+        }
+    }
+
+    //Circle object to draw circle
+    var CircleShape = function () {
+        this.make = function () {
+            var c = document.getElementById("myCanvas");
+            var ctx = c.getContext("2d");
+            ctx.beginPath();
+            ctx.arc(100, 75, 50, 0, 2 * Math.PI);
+            ctx.stroke();
+        }
+    }
+
+    //Square object to draw square
+    var SquareShape = function () {
+        this.make = function () {
+            var c = document.getElementById("myCanvas");
+            var ctx = c.getContext("2d");
+            ctx.beginPath();
+            ctx.rect(50, 50, 50, 50);
+            ctx.stroke();
+        }
+    }
+
+
+--------------------------------------------
+
+  //Car factory to create cars
+    var CarFactory= function() {
+        var car
+        this.createCar = function (carType) {
+            if (carType === "honda") {
+                return new HondaCar();
+            }
+            else if (carType === "nissan") {
+                return new NissanCar();
+            }
+        }
+    }
+
+    //Honda object
+    var HondaCar = function () {
+        this.make = function () {
+            console.log("This is Honda Accord");
+        }
+    }
+
+    //Nissan object
+    var NissanCar = function () {
+        this.make = function () {
+            console.log("This is Nissan Patrol")
+        }
+    }
+------------------------------------------------------
+ function execute() {
+        //initializing an array to hold objects
+        var objects = [];
+
+        //Creating Shape Factory to create circle shape
+        var shapeFactory = new ShapeFactory();
+        var circleShape = shapeFactory.createShape("circle");
+
+        //Creating Car Factory to create cars
+        var carFactory = new CarFactory();
+        var hondaCar= carFactory.createCar("honda");
+        var nissanCar = carFactory.createCar("nissan");
+
+        //Adding all the instances created through factories
+        objects.push(circleShape);
+        objects.push(hondaCar);
+        objects.push(nissanCar);
+
+        //Calling make method of all the instances. 
+        for (var i = 0; i < objects.length; i++) {
+            alert(objects[i]);
+            objects[i].make();
+        }
+    }
+
+</script>
+
+-------------------------------------
+    <div>
+        <input type="button" onclick="execute()" value="Execute" />
+    </div>
+    <div>
+        <canvas id="myCanvas"></canvas>
+    </div>
+
+Adapter Pattern
+======================
+
+// old interface
+    function PersonRepository(){
+        this.SavePerson= function(name, email, phoneNo){
+            //Call ajax to save person
+            console.log("Name: " + name + ", Email: " + email + ", Phone No: " + phoneNo);
+        }
+    }
+
+
+------------------------------------
+var execute = function () {
+
+        var personRepository = new PersonRepository();
+        personRepository.SavePerson("John", "john@email.com", "1201111111");
+
+    
+    }
+   
+
+
+-------------------------------------
+
+function PersonRepository() {
+        this.SavePerson = function (person) {
+            //call ajax to send  JSON person data
+            console.log("Name: " + person.name + ", Email: " + person.email + ", Phone No: " + person.phoneNo);
+        }
+    }
+
+--------------------------------------------
+
+   function PersonRepositoryAdapter() {
+        this.SavePerson = function (name, email, phoneNo) {
+            var person = { "name": name, "email": email, "phoneNo": phoneNo };
+					
+            var personRepository = new PersonRepository();
+            //calling new Person Repository
+personRepository.SavePerson(person);
+        }
+    }
+
+--------------------------------------------------
+
+    var execute = function () {
+
+		//old interface
+//        var personRepository = new PersonRepository();
+  //      personRepository.SavePerson("John", "john@email.com", "1201111111");
+
+			//calling adapter pattern
+        var personAdapter = new PersonRepositoryAdapter();
+        personAdapter.SavePerson("John", "john@email.com", "1201111111");
+
+    }
+
+Observer Pattern
+=========================
+
+<script>
+
+    //Sample function to convert text to French language
+    function translateTextToFrench(value) {
+        // call some service to convert text to French language
+        return value;
+    }
+    
+    //Sample function to convert text to Arabic language
+    function translateTextToArabic(value) {
+        //cal some service to convert text to Arabic language
+        return value;
+
+    }
+
+    //Helper function used by the Observer implementors 
+    var HelperFunction = function (type) {
+
+        var txtEntered = document.getElementById("txtEntered");
+
+        var englishText = document.getElementById("englishText");
+        var frenchText = document.getElementById("frenchText");
+        var arabicText = document.getElementById("arabicText");
+
+        if (type == "english") {
+            englishText.innerText = txtEntered.value;
+        } else if (type == "french") {
+            frenchText.innerText = translateTextToFrench(txtEntered.value);
+        } else if (type == "arabic") {
+            arabicText.innerText = translateTextToArabic(txtEntered.value);
+        }
+    }
+
+    var EnglishTranslator = {
+        update: function () {
+            //Call helper function to change text to English
+            HelperFunction("english");
+        }
+    }
+
+    var FrenchTranslator = {
+        update: function () {
+            //Call helper function to change text to French
+            HelperFunction("french");
+        }
+    }
+
+    
+    var ArabicTranslator = {
+        update: function () {
+            //Call helper function to change text to Arabic
+            HelperFunction("arabic");
+        }
+    }
+
+    //Observer function that contains the list of observer handlers
+    function Observer() {
+        this.observers = [];
+    }
+
+    //to add observer
+    Observer.prototype.addObserver = function (object) {
+        console.log('added observer: ' + object);
+        this.observers.push(object);
+    };
+
+    //to remove observer
+    Observer.prototype.removeObserver = function (object) {
+        console.log("removing observer");
+        for (i = 0; i < this.observers.length; i++) {
+            if (this.observers[i] == object) {
+                this.observers.splice(object);
+                return true;
+            }
+        }
+        return false;
+    };
+
+    //To notify all observers and call their update method
+    Observer.prototype.notify = function () {
+        for (i = 0; i < this.observers.length; i++) {
+            this.observers[i].update();
+        }
+    }
+
+
+    //Adding objects as observers that implements the update method
+    var observer = new Observer();
+    observer.addObserver(EnglishTranslator);
+    observer.addObserver(FrenchTranslator);
+    observer.addObserver(ArabicTranslator);
+
+
+    //Execute will be called on button click to notify observers
+    var execute = function () {
+        observer.notify();
+    };
+       
+
+</script>
+<body>
+    <div>
+        Specify some text: <input type="text" id="txtEntered" />
+        <input type="button" onclick="execute()" value="Notify" />
+    </div>
+    <div>
+        <span id="englishText"></span>
+        <span id="frenchText"></span>
+        <span id="arabicText"></span>
+    </div>
+</body>

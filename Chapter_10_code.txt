@@ -1,0 +1,32 @@
+Add ProductView
+=======================
+
+<body>
+<div>
+<label> Product Code: </label>
+<input type="text" data-bind="value: prodCode" />
+</div>
+<div>
+<label> Product Unit Price: </label>
+<input type="text" data-bind="value: prodUnitPrice" />
+</div>
+<div>
+<label> Product Expiry: </label>
+<input type="text" data-bind="value: prodExpiry" />
+</div>
+<div>
+<label> Product Quantity: </label>
+<input type="text" data-bind="value: prodQuantity" />
+</div>
+<div>
+<input id="btnSaveProduct" type="button" value="Save Product" />
+</div>
+<script src="lib/knockout/dist/knockout.js"></script>
+<script src="Js/ProductViewModel.js"></script>
+<script>
+        (function () {
+            var prod = new ProductViewModel();
+            document.getElementById("btnSaveProduct").onclick = function () { prod.saveProduct(); };
+        })();
+</script>
+</body>

@@ -1,0 +1,267 @@
+Adding JavaScript to an HTML page
+==================================
+
+<html>
+ <head>
+  <script>
+    alert(“This is a simple text”);
+  </script>
+ </head>
+</html>
+
+<html>
+ <body>
+  <script>
+   alert(“hello world”);
+  </script>
+ </body>
+</html>
+
+
+Array in JavaScript
+==================================
+
+ var browsers = [“Microsoft Edge”, “Google Chrome”, “Mozilla  Firefox”, “Safari”];
+ var browsers[0]; //returns Microsoft Edge
+ var browsers[1]; //returns Google Chrome
+ var browser[3]; //returns Safari
+ var totalItems = browsers.length;
+
+
+What is JSON?
+==================================
+
+var person = {
+   “name” : “John Martin”,
+	“email”: johnmartin@email.com,
+	“phone”: “201892882”
+	}
+
+person.name;
+person.email;
+person.phone;
+
+Declaring Arrays in JSON
+
+var persons =
+[{ 
+  “name”:”John”, 
+  “email”: “john@email.com”, 
+  “phone”:”201832882”
+},
+{
+  “name”:”Steve”, 
+  “email”: “steve@email.com”, 
+  “phone”:”201832882”
+},
+{
+“name”:”Smith”, 
+“email”: “smith@email.com”, 
+“phone”:”201832882”
+}]
+
+
+//returns name of the first item in the collection i.e. John
+Persons[0].name 
+//returns email of the first item in the collection i.e. john@email.com
+Persons[0].email 
+//returns name of the second item in the collection i.e. Steve
+Persons[1].name 
+
+
+Nesting data in JSON
+==================================
+
+var employee=
+{
+  "ID":"00333",
+  "Name":"Scott",
+  "DateOfJoining":"01/Jan/2010",
+  "Experiences":[
+     {
+       "companyName":"ABC",
+       "from":"Nov 2008",
+       "to":"Oct 2009",
+       "projects" :[
+         {
+         "title":"Sharepoint Migration",
+         "noOfTeamMembers":5,
+         "technologyUsed":[{"name":"SharePoint Server"}, {"name":"C#"}, {"name":"SQL Server"}]
+         },
+         {
+         "title":"Messaging Gateway",
+         "noOfTeamMembers":5,
+         "technologyUsed":[{"name":"ASP.NET"}, {"name":"C#"}, {"name":"SQL Server"}]
+         }
+        ]
+     },
+     {
+     "companyName":"XYZ",
+       "from":"Nov 2009",
+       "to":"Oct 2015",
+       "projects" :[
+         {
+         "title":"ERP System",
+         "noOfTeamMembers":5,
+         "technologyUsed":[{"name":"ASP.NET"}, {"name":"C#"}, {"name":"SQL Server"}]
+         },
+         {
+         "title":"Healthcare System",
+         "noOfTeamMembers":4,
+         "technologyUsed":[{"name":"ASP.NET"}, {"name":"C#"}, {"name":"SQL Server"}]
+         }
+        ]
+     }
+    ]
+}
+
+
+Conversions in data types
+==================================
+
+var res=”Hello World”;
+res= 2;
+var result = res + “3”
+
+
+Constants in JavaScript
+==================================
+
+const pi= 3.42 
+
+
+Comments 
+==================================
+
+<script type="text/javascript">
+
+function showInformation() {
+
+ //var spObj = window.document.getElementById("spInfo");         
+ spObj.innerHTML =
+ "Available Height: " + screen.availHeight + "<br>" +
+ /*"Available Width: " + screen.availWidth + "<br>" +
+   "Height: " + screen.height + "<br>" +*/
+  "Width: " + screen.width + "<br>"
+ }
+ 
+</script>
+
+
+
+this keyword
+
+ <script type="text/javascript">
+        var name = "Scott Watson";
+
+        var customer =
+        {
+            name: "John Marting",
+            email: "john@xyz.com",
+            mobile: "109293988844",
+            show: function () {
+                alert("Name: " + this.name + " Email: " + this.email + " Mobile: " + this.mobile);
+            }
+        }
+        function ShowMessage() {
+            alert("Global name is " + this.name);
+            alert("Customer info is " + customer.show());
+        }
+    </script>
+
+Using this on a calling method
+<html>
+<head> 
+ <script type="text/javascript">
+        function Multiply(obj, val) {
+            alert(obj.value * val);
+        }     
+   </script>
+</head>
+<body>
+    <input type="text" onchange ="Multiply(this, 2);" />
+</body>
+</html>
+
+
+The function statement and expression
+==================================
+
+<script>
+ 
+ function GetPerson(id) {
+	return service.GetPerson(id);  	
+ }
+ 
+</script>
+
+Anonymous functions
+==================================
+
+  var showMessage = function(message){
+            console.log(message);
+        }
+        showMessage("Hello World");
+Another example of defining anonymous function and passing it as a parameter
+function messageLogger(message ,logMessage) {
+            logMessage();
+        }
+
+        function consoleMessage() {
+            alert("Hello World");
+        }
+        messageLogger(consoleMessage());
+
+
+Class statement and expression
+==================================
+
+<script>
+    class Rectangle {
+      constructor(height, width) {
+        this.height=height;
+        this.width=width;
+      }
+      get Area() {
+        return this.calcArea();
+      }
+      calcArea(){
+        alert("Area is "+ this.height * this.width);
+      }
+ }
+</script>
+
+<script>
+    var Rectangle = class{
+      constructor(height, width) {
+        this.height=height;
+        this.width=width;
+      }
+      get Area() {
+        return this.calcArea();
+      }
+      calcArea(){
+        alert("Area is "+ this.height * this.width);
+      }
+ }
+</script>
+
+The void operator
+==================================
+
+<html>
+<head></head>
+<body>
+    <a href="javascript:void(0);">Do Nothing</a>
+</body>
+</html>
+
+Conditional operators
+==========================
+
+    <script>
+	  function EvaluatecompareValues(n1, n2)
+        var n1= 6;
+        var n2 = 7;
+        (n1 == n2) ? alert("Both values are equal") : alert("Passed values are not equal”);
+    </script>

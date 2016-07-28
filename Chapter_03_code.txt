@@ -1,0 +1,754 @@
+Getting started with jQuery
+=============================================================
+
+<head>
+<script src=”~/scripts/jquery.js”></script>
+</head>
+<body>
+</body>
+
+Using a Content Delivery Network
+=============================================================
+
+<script src=”http://ajax.microsoft.com/ajax/jquery/jquery-2.0.js”>
+</script>
+
+
+<script src=”http://ajax.googleapis.com/ajax/libs/jquery/2.0/jquery.min.js”></script>
+
+
+The use of CDN
+============================================================
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
+
+<script>if (!window.jQuery) { document.write('<script src="/path/to/your/jquery"><\/script>'); }
+</script>
+
+
+------------------------------------------------------------
+<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.1.4.min.js"
+                    asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                    asp-fallback-test="window.jQuery">
+            </script>
+
+------------------------------------------------------------
+<environment names="Development">
+            <script src="~/lib/jquery/dist/jquery.js"></script>
+            <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+            <script src="~/js/site.js" asp-append-version="true"></script>
+        </environment>
+        <environment names="Staging,Production">
+            <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.1.4.min.js"
+                    asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                    asp-fallback-test="window.jQuery">
+            </script>
+            <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/bootstrap.min.js"
+                    asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+                    asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
+            </script>
+            <script src="~/js/site.min.js" asp-append-version="true"></script>
+        </environment>
+
+The Document Ready Event
+==============================================================
+
+<html>
+<head>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            alert("Hello World");
+        });
+    </script>
+</head>  
+
+The jQuery Selectors
+==============================================================
+
+Selecting DOM Elements by ID
+==============================================================
+
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#mainDiv').html("<h1>Hello World</h1>");
+
+        });
+    </script>
+</head>  
+<body>
+    <div id="mainDiv">
+        
+    </div>
+</body>
+</html>
+
+---------------------------------------------------------------
+<script>
+        $(document).ready(function () {
+           var htmlString= $('#mainDiv').html();
+
+        });
+    </script>
+
+Selecting DOM Elements by TagName
+===============================================================
+
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('div').css('background-color', 'Red');
+        });
+    </script>
+</head>  
+<body>
+    <div id="headerDiv">
+    </div>
+    <div id="mainDiv">    
+    </div>
+    <div id="footerDiv">
+    </div>
+</body>
+</html>
+
+-----------------------------------------------------------------
+    <script>
+        $(document).ready(function () {
+            $('div').each(function (index, element) {
+                $(element).html(index);
+            });
+        });
+    </script>
+
+----------------------------------------------------------------
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('div').each(function () {
+                alert($(this).html());
+            });
+        });
+    </script>
+</head>  
+<body>
+    <div id="headerDiv">
+      <h1>Demo </h1>
+    </div>
+    <div id="mainDiv">
+        <p>This is a demo of using jQuery for selecting elements</p>
+    </div>
+    <div id="footerDiv">
+      <footer> Copyright - JavaScript for .Net Developers </footer>
+    </div>
+</body>
+</html>
+
+----------------------------------------------------------------------
+<html>
+<head>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('div, h1, p, footer').each(function () {
+                console.log($(this).html());
+            });
+        });
+    </script>
+</head>  
+<body>
+    <div id="headerDiv">
+      <h1>Demo </h1>
+    </div>
+    <div id="mainDiv">
+        <p>This is a demo of using jQuery for selecting elements</p>
+    </div>
+    <div id="footerDiv">
+      <footer> Copyright - JavaScript for .Net Developers </footer>
+    </div>
+</body>
+</html>
+
+Selecting Nodes by Class Name
+=========================================================================
+
+<!DOCTYPE html>
+<html>
+<head>
+   <link rel="stylesheet" type="text/css" href="Content/bootstrap.css" />
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var lst = $('.btn-primary');
+            alert(lst.length);
+        });
+    </script>
+</head>  
+<body>
+    <div class="container">
+        <p></p>
+        <button type="button" class="btn btn-primary active">Edit </button>
+        <button type="button" class="btn btn-primary disabled">Save</button>
+        <button type="button" class="btn btn-danger" value="Cancel">Cancel</button>
+    </div>
+</body>
+</html>
+
+Selecting by Attribute Value
+========================================================================
+
+<!DOCTYPE html>
+<html>
+<head>
+   <link rel="stylesheet" type="text/css" href="Content/bootstrap.css" />
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var lst = $('input[type]');
+            console.log(lst.length);
+        });
+    </script>
+</head>  
+<body>
+
+    <div class="container">
+        <p></p>
+        <input type="text" value="hello world" />
+        <input type="text" value="this is a demo" />
+        <input type="button" value="Save" />
+    </div>
+</body>
+</html>
+
+------------------------------------------------------------------------
+
+<script>
+        $(document).ready(function () {
+            var lst = $('input[value=”hello world”]');
+            alert(lst.length);
+        });
+    </script>
+
+
+-------------------------------------------------------------------------
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="Content/bootstrap.css" />
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var lst = $('input[value^="Pr"]');
+            alert(lst.length);
+        });
+    </script>
+</head>
+<body>
+
+    <div class="container">
+        <p></p>
+        <input type="text" value="Product 1" />
+        <input type="text" value="This is a description" />
+        <input type="button" value="Process" />
+    </div>
+</body>
+</html>
+
+------------------------------------------------------------------------------
+<script>
+        $(document).ready(function () {
+            var lst = $('input[value$="1"]');
+            alert(lst.length);
+        });
+    </script>
+
+
+----------------------------------------------------------------------------
+<script>
+        $(document).ready(function () {
+            var lst = $('input[value*="ro"]');
+            alert(lst.length);
+        });
+    </script>
+
+Selecting Input Elements
+==============================================================================
+
+@model WebApplication.ViewModels.Book.BookViewModel
+@{
+    ViewData["Title"] = "View";
+}
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(':input').each(function () {
+            $(this).css('font-family', 'Bradley Hand ITC');
+        });
+    });
+</script>
+<form asp-action="View" class="container">
+    <br />
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label asp-for="Name" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger" />
+            </div>
+        </div>
+        <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Description" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <textarea asp-for="Description" class="form-control" ></textarea>
+                <span asp-validation-for="Description" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+
+Selecting All Elements
+===========================================================================
+
+<!DOCTYPE html>
+<html>
+<head>
+   <link rel="stylesheet" type="text/css" href="Content/bootstrap.css" />
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("*").each(function () {
+                console.log($(this).prop('nodeName'));
+            });        
+        });
+    </script>
+</head>  
+<body>
+    <form class="container">
+        <div class="form-group">
+            <label>Name</label>
+            <input type="text" class="form-control"/>
+        </div>
+    </form>    
+</body>
+</html>
+
+Selecting First Child and Last Child Element
+==============================================================================
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="Content/bootstrap.css" />
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('option:first-child').css('font-style', 'italic');
+            $('option:last-child').css('font-style', 'italic');
+            alert(lst.length);
+        });
+    </script>
+</head>
+<body>
+    <select>
+        <option>--select--</option>
+        <option>USA</option>
+        <option>UK</option>
+        <option>Canada</option>
+        <option>N/A</option>
+    </select>
+</body>
+</html>
+
+
+Contains Selector in jQuery
+================================================================================
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="Content/bootstrap.css" />
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var lst = $('div:contains("demo")');
+            alert(lst.length);
+        });
+    </script>
+
+</head>
+<body>
+    <div>
+        This is a sample demo for contains selector
+    </div>
+    <div>
+        Demo of the selector 
+    </div>
+    <div>
+        Sample demo
+    </div>
+</body>
+</html>
+
+Selecting Even and Odd Rows Selectors
+===================================================================================
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="Content/bootstrap.css" />
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('tr:odd').css('background-color', 'grey');
+        });
+    </script>
+
+</head>
+<body>
+   <table>
+       <thead>
+           <tr><th>Product Name</th><th>Description</th><th>Price</th></tr>
+       </thead>
+       <tbody>
+           <tr><td>Product 1</td><td>This is Product 1</td><td>$100</td></tr>
+           <tr><td>Product 2</td><td>This is Product 2</td><td>$500</td></tr>
+           <tr><td>Product 3</td><td>This is Product 3</td><td>$330</td></tr>
+           <tr><td>Product 4</td><td>This is Product 4</td><td>$50</td></tr>
+           <tr><td>Product 5</td><td>This is Product 5</td><td>$1000</td></tr>
+           <tr><td>Product 6</td><td>This is Product 6</td><td>$110</td></tr>
+           <tr><td>Product 7</td><td>This is Product 7</td><td>$130</td></tr>
+           <tr><td>Product 8</td><td>This is Product 8</td><td>$160</td></tr>
+           <tr><td>Product 9</td><td>This is Product 9</td><td>$20</td></tr>
+           <tr><td>Product 10</td><td>This is Product 10</td><td>$200</td></tr>
+       </tbody>
+   </table>
+</body>
+</html>
+
+Manipulating DOM
+========================================================================================
+
+Modifying Elements Properties
+========================================================================================
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="Content/bootstrap.css" />
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.0.min.js"></script>
+    <script>
+        function updateHtml() {
+            $('p').html($('#txtHtml').val());
+        }
+
+        function updateText() {
+            $('p').text($('#txtText').val());
+        }
+
+        function increaseFontSize() {
+            var fontSize = parseInt($('p').css('font-size'));
+            var fontSize = fontSize + 1 +"px";
+            $('p').css({'font-size': fontSize});
+        }
+    </script>
+</head>
+<body >
+    <form class="form-control">
+        <div class="form-group">
+            <p>this is a book for JavaScript for .Net Developers</p>
+
+        </div>
+        <div class="form-group">
+            Enter HTML: <input type="text" id="txtHtml" />
+            <button onclick="updateHtml()">Update Html</button>
+        </div>
+        <div class="form-group">
+            Update Text: <input type="text" id="txtText" />
+            <button onclick="updateText()">Update Text</button>
+        </div>
+        <div class="form-group">
+            <button onclick="increaseFontSize()">Increase Font Size</button>
+        </div>
+    </form>
+</body>
+</html>
+
+-------------------------------------------------------------------------------------------
+Creating New Elements
+===========================================================================================
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="Content/bootstrap.css" />
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var formControl = $("<form id='frm' class='container' ></form>");
+            $('body').append(formControl);
+            var nameDiv = $("<div class='form-group'><label id='lblName'>Enter Name: </label> <input type='text' id='txtName' class='form-control' /></div>");
+            var descDiv = $("<div class='form-group'><label id='lblDesc'>Enter Description: </label> <textarea class='form-control' type='text' id='txtDescription' /></div>");
+            var btnSave = $("<button class='btn btn-primary'>Save</button>")
+            formControl.append(nameDiv);
+            formControl.append(descDiv);
+            formControl.append(btnSave);          
+        });
+    </script>
+</head>           
+</body>
+</html>
+
+Removing Elements and Attributes 
+==============================================================================================
+
+@model WebApplication.ViewModels.Book.BookViewModel
+@{
+    ViewData["Title"] = "View";
+}
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.0.min.js"></script>
+<script>
+    var mainDivContent=undefined
+    $(document).ready(function () {
+        $('button').click(function () {
+            if (mainDivContent) {
+                mainDivContent.appendTo('#pageDiv');
+                mainDivContent = null;
+            } else {
+                mainDivContent = $('#mainDiv').detach();
+            }
+        });
+    });
+</script>
+<div id="pageDiv" class="container">
+    <br />
+    <div id="mainDiv" class="form-horizontal">
+        <div class="form-group">
+            <label asp-for="Name" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Name" class="form-control" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button class="btn btn-primary"> Detach/Attach</button>
+        </div>
+    </div>
+</div>
+
+Events handling in jQuery
+======================================================================================
+
+Registering events in jQuery 
+===================================================================================
+
+$(document).ready(function({
+$(‘#button1’).click(function(){
+	console.log(“button has been clicked”);
+});
+)};
+
+---------------------------------------------------------------------------------
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.0.min.js"></script>
+<script>
+    var mainDivContent=undefined
+    $(document).ready(function () {
+        $('#btnSubmit').click(function () {
+            window.location.href = '@Url.Action("Contact", "Home")';    
+        });
+    });
+</script>
+<div id="pageDiv" class="container">
+    <br />
+   
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button id="btnSubmit" class="btn btn-primary"> Submit</button>
+        </div>
+    </div>
+</div>
+--------------------------------------------------------------------------------
+@model WebApplication.ViewModels.Book.BookViewModel
+@{
+    ViewData["Title"] = "View";
+}
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.0.min.js"></script>
+<script>
+    var mainDivContent=undefined
+    $(document).ready(function () {
+        $('#btnSubmit').click(function () {
+            window.location.href = '@Url.Action("Contact", "Home")';    
+        });
+
+        $('input').each(function () {
+            $(this).focus(function () {
+                $(this).css('background-color', 'aliceblue');
+            })
+            $(this).blur(function () {
+                $(this).css('background-color', 'white');
+
+            });
+        });
+    });
+</script>
+<div id="pageDiv" class="container">
+    <br />
+    <div id="mainDiv" class="form-horizontal">
+        <div class="form-group">
+            <label asp-for="Name" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Name"  class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Description" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Description" class="form-control" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button id="btnSubmit" class="btn btn-primary"> Submit</button>
+        </div>
+    </div>
+</div>
+
+Binding to Events using on and off 
+=======================================================================================
+
+    $(document).ready(function () {
+        $('#btnSubmit').on('click', function () {
+            window.location.href = '@Url.Action("Contact", "Home")';
+        });
+        });
+
+----------------------------------------------------------------------------------------
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#btnSubmit').on('click', function () {
+            $('#btnSubmit').off('click');           
+        });
+    });
+</script>
+
+------------------------------------------------------------------------------------------
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#btnSubmit').on('click', function (event) {
+            event.preventDefault();
+        });
+    });
+</script>
+
+-----------------------------------------------------------------------------------------------
+
+@model IEnumerable<WebApplication.ViewModels.Book.BookViewModel>
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('table').on('click','tr', null, function() {
+            $(this).css('background-color', 'aliceblue');
+        });
+    });
+</script>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th></th>
+    </tr>
+    
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+        </td>
+    </tr>
+}
+</table>
+
+
+Using Hover Events
+===================================================================================
+
+@{
+    ViewData["Title"] = "View";
+}
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#pageDiv').hover(function () {
+            $(this).css('background-color', 'aliceblue');
+
+        },
+        function () {
+            $(this).css('background-color', 'white');
+
+        }
+        )
+
+    });
+</script>
+
+<div id="pageDiv" class="container">
+    <br />
+
+    <div id="mainDiv" class="form-horizontal">
+        <div class="form-group">
+            <label asp-for="Name" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Name"  class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Description" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Description" class="form-control" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button id="btnSubmit" class="btn btn-primary"> Submit</button>
+        </div>
+    </div>
+</div>

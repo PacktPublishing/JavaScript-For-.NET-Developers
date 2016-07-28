@@ -1,0 +1,791 @@
+Variables - scope and hoisting
+=================================
+
+	function getCountryGMT(countryName) {
+            if (countryName == "Pakistan") {
+                var gmt = "+5.00";
+            }
+            else if (country == "Dubai") {
+                var gmt = "+4.00";
+            } else {
+                return null;
+            }
+        }
+
+
+------------------------------------------------
+        function getCountryGMT(countryName) {
+           var gmt; 
+        if (countryName == "Pakistan") {
+                gmt = "+5.00";
+            }
+            else if (country == "Dubai") {
+                gmt = "+4.00";
+            } else {
+                return null;
+            }
+        }
+
+---------------------------------------------
+
+      function getCountryGMT(countryName) {
+            if (countryName == "Pakistan") {
+                gmt = "+5.00";
+            }
+            else if (country == "Dubai") {
+                gmt = "+4.00";
+            } else {
+                return null;
+            }
+        }
+
+        var gmt;
+
+
+-----------------------------------------------
+   var gmt;
+
+      function getCountryGMT(countryName) {
+            if (countryName == "Pakistan") {
+                gmt = "+5.00";
+            }
+            else if (country == "Dubai") {
+                gmt = "+4.00";
+            } else {
+                return null;
+            }
+        }
+
+Declaring let
+=================================================
+
+function getCountryGMT(countryName) {
+            if (countryName == "Pakistan") {
+                let gmt = "+5.00";
+            }
+            else {
+                return null;
+            }
+        }
+
+------------------------------------------------
+function getCountryGMT(countryName) {
+            var gmt;
+            if (countryName == "Pakistan") {
+                let gmt = "+5.00";
+            }
+            else {
+                return null;
+            }
+        }
+
+
+
+Functions in loops
+===========================
+
+ var values = [];
+        for(var i=0;i<10;i++)
+        {
+            values.push(function () { console.log("value is " + i) });
+        }
+        values.forEach(function(valuesfunc) {
+            valuesfunc();
+        })
+
+
+
+-----------------------------------------------------
+        var values = [];
+        for(let i=0;i<10;i++)
+        {
+            values.push(function () { console.log("value is " + i) });
+        }
+        values.forEach(function(valuesfunc) {
+            valuesfunc();
+        })
+
+
+Events in JavaScript
+=========================================
+
+<html>
+<body>
+    <div id="contentPane" style="width:200px; height:200px;">     
+    </div>
+    <script>
+        var divPane = document.getElementById("contentPane");
+        divPane.onmouseenter = function () {
+            divPane.innerHTML = "You are inside the div";
+        };
+        divPane.onmouseleave = function () {
+            divPane.innerHTML = "You are outside the div";
+        };
+    </script>
+</body>
+</html>
+
+----------------------------------------------
+<html>
+<body>
+    <script>
+        function displayMessage() {
+            alert("you have clicked button");
+        }
+</script> 
+    <input type="button" onclick="displayMessage();" />
+</body>
+</html>
+
+Function Arguments
+========================
+
+function execute(a, b) {
+            //do something
+}
+
+//calling without parameter values
+execute();
+       
+//passing numeric values
+execute(1, 2);
+
+//passing string values
+execute("hello","world");
+
+//passing more parameters
+execute(1,2,3,4,5);
+
+--------------------------------
+   function execute(a, b) {
+            //do something
+            alert(arguments[0]);
+            alert(arguments[1]);
+            alert(arguments[2]);
+            alert(arguments[3]);
+            alert(arguments[4]);
+        }
+
+        //passing more parameters
+        execute(1, 2, 3, 4, 5);
+  }
+
+Object-oriented programming in JavaScript
+===================================================
+
+Defining objects using object literal notation
+=================================================
+
+var person = {id: “001”, name: “Scott”, isActive: true, 
+Age: 35 };
+
+----------------------------------------------------
+var personModel = {id: “001”, name: “Scott”, isActive: true, 
+Age: 35, function: savePerson(){ //code to save person record } };
+
+
+Using the class Keyword
+===========================
+
+class Person {
+            constructor() { }
+        }
+
+
+Defining properties using Object Literal Notation
+===================================================
+
+var person = {
+            id: "001",
+            name:"Person 1",
+            savePerson: function(){
+            }
+            
+        }
+
+Defining properties using constructor pattern
+================================================
+
+var person = function(id, name){
+            this._id = id;
+            this._name = name;
+        }
+
+------------------------------------------------
+var p1 = new person(“001”,”Person 1”);
+console.log(“Person ID: ”+ p1.PersonID);
+console.log(“Person Name: ”+ p1.name);
+
+--------------------------------------------------
+var person = function(){
+}
+var p1 = new person();
+p1.id=”001”;
+p1.name=”Person 1”;
+
+----------------------------------------------------
+function person(id, name){
+           this.id = id;
+		     this.name = name;
+            this.logToConsole: function(){
+                console.log("Person ID is "+ this.id  +",Name: "+ this.name);
+            };
+        }
+
+Defining properties using setters/getters in ECMAScript 6
+========================================================
+
+  class Person {
+            constructor(id, name) {
+                this.id = id;
+                this.name = name;
+            }         
+        }
+        var p1 = new person("001", "Person 1");
+        console.log ("Person ID: " + p1.id);
+
+
+------------------------------------------------------------
+  class Person {
+            set Name(name) {
+                this.personName = name;
+            }
+           get Name() {
+                return this.personName;
+            }
+        }
+        var p1 = new Person();
+        p1.Name = "Person 1";
+        console.log("personName " + p1.Name);      
+
+
+Managing property descriptors
+====================================================
+
+Object.defineProperty(car, ‘color’,{enumerable: false});
+Object.defineProperty(car, ‘color’,{configurable: false});
+Object.defineProperty(car, ‘color’,{writable: false});
+
+Using getters and setters
+======================================================
+
+var car = { name: { make: “honda”,  brand: “accord”} };
+Object.defineProperty(car, ‘fullname’, 
+{
+	get: function(){
+		return this.name.make + ‘ ‘ + this.name.brand 
+},
+set: function (value) {
+	var names= value.split(‘ ‘);
+	this.name.make = names[0];
+	this.name.brand = names[1];
+}
+});
+car.fullname = “Honda Accord”;
+display(car.fullname);
+
+
+Defining Method through Object Literal notation approach
+=========================================================
+
+        var person = {
+			  id: “001”,
+            name:"Person 1",
+            logToConsole: function()
+            {
+                console.log("Person ID is "+ this.id  +", Customer Name: "+ this.name);
+            }
+        }
+
+Defining Object using Constructor function approach
+=====================================================
+
+var person = function (id, name) {
+			   this._id = id;
+            this._name = name;
+this.LogToConsole= function(){
+            console.log("Person Name is "+ this._name);
+        }     
+} 
+var p1 = new person("001", “Person 1”);
+        p1.LogToConsole();
+
+
+-------------------------------------------------
+function person(id, name) {
+				this._id = id;
+            this._name = name;
+this.LogToConsole= function(){
+            console.log("Name is "+ this._name);
+        }   
+  }
+  var p1 = new person(“001”,"Person 1");
+  p1.LogToConsole();
+
+
+
+----------------------------------------------------
+
+        class Person {
+
+            constructor() {
+           
+            }
+
+            set Name(name) {
+                this._name = name;
+            }
+
+            get Name() {
+                return this._name;
+            }
+
+            logToConsole() {
+                console.log("Person Name is " + Name);
+            }
+        }
+
+        var p1 = new Person();
+        p1.Name = "Person 1";
+        p1.logToConsole();
+
+Extending Properties and Methods 
+======================================
+
+        var Person = function (name) {
+            this.name = name;
+        }
+        var p1 = new Person("Person 1");
+        p1.phoneNo = "0021002010";
+        alert(p1.name);
+
+
+------------------------------------------
+var Person = function (name) {
+            this.name = name;
+        }
+        Person.prototype.phoneNo = "";
+        Person.prototype.logToConsole = function () {
+            alert("Person Name is " + this.name +" and phone No is "+ this.phoneNo)
+        };
+        var p1 = new person("Person 1");
+        p1.phoneNo = "XXX"
+        p1.logToConsole();
+
+
+Private and Public Members
+=========================================
+
+   function a() {
+            var x = 1;
+            this.y = 2;
+            x1 = function () {
+                console.log("this is privately accessible");
+            }
+            this.y1 = function () {
+                console.log("this is publicly accessible");
+            }
+        }
+
+Inheritance
+==============================================
+
+        var Person = function (id, name) {
+            this.id = id;
+            this.name = name;
+        }
+
+        var Vendor = function (companyName, location) {
+            this.companyName = companyName;
+            this.location = location;
+            
+        }
+
+        var Employee = function (employeeType, dateOfJoining) {
+            this.employeeType = employeeType;
+            this.dateOfJoining = dateOfJoining;
+        }
+
+        Vendor.prototype = new Person("001", "John");
+        Employee.prototype = new Person("002", "Steve");
+
+        var vendorObj = new Vendor("ABC", "US");
+        alert(vendorObj.id);
+
+
+--------------------------------------------------------
+
+var Person = function (id, name) {
+            this.id = id;
+            this.name = name;
+        }
+
+        //Adding method to the Person's prototype to show message
+        Person.prototype.showMessage = function (message) {
+            alert(message);
+        }
+
+        var Vendor = function (companyName, location) {
+            this.companyName = companyName;
+            this.location = location;
+               
+        }
+
+        //Assigning the parent's prototype to child's prototype
+        Vendor.prototype = Person.prototype;
+        var vendorObj = new Vendor("XYZ", "Dubai");
+        vendorObj.showMessage(vendorObj instanceof Person);
+        
+
+
+--------------------------------------------------------------
+        var Person = function (id, name) {
+            this.id = id;
+            this.name = name;
+        }
+
+        //Adding method to the Person's prototype to show message
+        Person.prototype.showMessage = function (message) {
+            alert(message);
+        }
+
+        var Vendor = function (companyName, location) {
+            this.companyName = companyName;
+            this.location = location;
+        }
+
+
+        //Assigning the parent's prototype to child's prototype
+        Vendor.prototype = Person.prototype;
+        
+        //Adding method to the Vendor's prototype to show at console
+        Vendor.prototype.showConsoleMessage = function (message) {
+            console.log(message);
+        }
+
+        var personObj = new Person("001", "John");
+		  //Person object access the child’s object method
+        personObj.showConsoleMessage("Console");
+
+Chaining Constructors in JavaScript
+================================================
+
+var Person = function (id, name) {
+            this.id = id;
+            this.name = name;
+        }
+
+        var Vendor = function (companyName, location, id, name) {
+            this.companyName = companyName;
+            this.location = location;
+            Person.call(this, id, name);
+        }
+
+        var employee = function (employeeType, dateOfJoining, id, name) {
+            this.employeeType = employeeType;
+            this.dateOfJoining = dateOfJoining;
+            Person.call(this, id, name);
+        }
+
+        Vendor.prototype = Person.prototype;
+        Employee.prototype = Person.prototype;
+
+        var vendorObj = new Vendor("ABC", "US", "V-01","Vendor 1");
+        alert(vendorObj.name);
+
+
+Inheritance using Object.create()
+==============================================
+
+
+ var Person = function (id, name) {
+            this.id = id;
+            this.name = name;
+        }
+
+        var Vendor = function (companyName, location, id, name) {
+            this.companyName = companyName;
+            this.location = location;
+            Person.call(this, id, name);
+        }
+
+        var Employee = function (employeeType, dateOfJoining, id, name) {
+            this.employeeType = employeeType;
+            this.dateOfJoining = dateOfJoining;
+            Person.call(this, id, name);
+        }
+
+        Vendor.prototype = Object.create(Person.prototype);
+        Employee.prototype = Object.create(Person.prototype);
+
+        var vendorObj = new Vendor("ABC", "US", "V-01", "Vendor 1");
+        alert(vendorObj.name);
+
+Predefined properties of Object.create() 
+============================================
+
+var customer1 = Object.create(Object.prototype, {
+            customerCode: {
+                value: "001",
+                enumerable: true,
+                writable: true,
+                configurable: true
+            }
+        });
+        alert("" + customer1.customerCode);       
+
+
+Defining inheritance using class 
+===========================================
+
+class Person {
+            
+            constructor(id, name) {
+                this._id = id;
+					this._name = name;
+            }
+
+            get GetID() {return this._id;}
+			   get GetName() {return this._name;}
+        }
+
+        class Vendor extends Person {
+            constructor(phoneNo, location, id, name){
+                super(id, name);
+                this._phoneNo = phoneNo;
+                this._location = location;
+             
+            }
+            logToConsole() {
+                alert("Person ID is " + this.GetID);
+            }
+        }
+
+        var vendorObj = new Vendor(“XXX”, “US”, “V-01”, “Vendor 1”);
+        vendorObj.logToConsole();
+
+
+----------------------------------------------------
+class Person {          
+            static logToConsole() {
+                console.log("Hello developers!");
+            }
+        }
+
+        class Vendor extends Person {
+        }
+
+        Vendor.logToConsole();
+
+Abstraction
+=====================================================
+
+var person = function (id, name) {
+            this._id = id;
+            this._name = name;
+            this.showMessage = function () { };
+        }
+        var vendor = function (companyName, location, id, name) {
+            this._companyName = companyName;
+            this._location = location;
+            person.call(this, id, name);
+            this.showMessage = function () {
+                alert("this is Vendor");
+            }
+        }
+        var employee = function (employeeType, dateOfJoining, id, name) {
+            this._employeeType = employeeType;
+            this._dateOfJoining = dateOfJoining;
+            person.call(this, id, name);
+            this.showMessage = function () {
+                alert("this is Employee");
+            }
+        }
+        vendor.prototype = Object.create(person.prototype);
+        employee.prototype = Object.create(person.prototype);
+        var personController = function (person) {
+            this.personObj = person;
+            this.showMessage = function () {
+                this.personObj.showMessage();
+            }
+        }
+
+        var v1 = new vendor("ABC", "USA", "V-01", "Vendor 1");
+        var p1 = new personController(v1);
+        p1.showMessage();
+
+---------------------------------------------------------
+
+  class person {
+            constructor(id, name) {
+                this._id = id;
+                this._name = name;
+            }
+            showMessage() { };
+        }
+        class vendor extends person {
+            constructor(companyName, location, id, name) {
+                super(id, name);
+                this._companyName = companyName;
+                this._location = location;
+               
+            }
+            showMessage() {
+                alert("this is Vendor");
+            }
+        }
+        class employee extends person {
+            constructor(employeeType, dateOfJoining, id, name) {
+                super(id, name);
+                this._employeeType = employeeType;
+                this._dateOfJoining = dateOfJoining;
+            }
+            showMessage() {
+                alert("this is Employee");
+            }
+        }
+        class personController {
+            constructor(person) {
+                this.personObj = person;
+            }
+            showMessage() {
+                this.personObj.showMessage();
+            }
+        }
+
+        var v1 = new vendor("ABC", "USA", "V-01", "Vendor 1");
+        var p1 = new personController(v1);
+        p1.showMessage();
+
+
+
+new.target
+=================================================
+
+ class person {
+            constructor(id, name) {
+                if(new.target === person){
+                    throw new TypeError("Cannot create an instance of Person class as its abstract in nature");
+                }
+                this._id = id;
+                this._name = name;
+            }
+            
+            showMessage() { };
+        }
+
+
+Closures
+================================
+
+function Incrementor() {
+            var x = 0;
+            return function () {
+                x++;
+                console.log(x);
+            }
+        }
+
+        var inc= Incrementor();
+        inc();
+        inc();
+        inc();
+
+-------------------------------------------
+
+function tableGen(number) {
+            var x = number;
+            return function (multiplier) {
+                var res = x * multiplier;
+                console.log(x +" * "+ multiplier +" = "+ res);
+            }
+        }
+
+        var twotable = tableGen(2);
+        var threetable = tableGen(3);
+
+        twotable(5);
+        threetable(6);
+
+Practical Use
+==============================
+
+<body>
+    <input type="text" id="txtMessage" />
+    <button  id="consoleLogger"> Log to Console </button>
+    <button  id="dialogLogger">Log to Dialog </button>   
+<script>
+
+    function getLogger(loggerType) {
+        return function () {
+            var message = document.getElementById("txtMessage").value;
+            if (loggerType == "console")
+                console.log(message);
+            else if (loggerType == "dialog")
+                alert(message);
+        }
+    }
+    var consoleLogger = getLogger("console");
+    var dialogLogger = getLogger("dialog");
+    document.getElementById("consoleLogger").onclick = consoleLogger;
+    document.getElementById("dialogLogger").onclick = dialogLogger;
+</script>
+</body>
+
+
+Maps and Weak Maps
+=================================
+
+var currencies = new Map();
+        currencies.set("US", "US Dollar");
+        currencies.set("UK", "British Pound");
+        currencies.set("CA", "Canadian Dollar");
+        currencies.set("PK", "Rupee");
+        currencies.set("UAE", "Dirham");
+        for (var currency of currencies) {
+            console.log(currency[0] + " currency is " + currency[1]);
+        }     
+
+
+------------------------------------------
+
+currencies.get(“UAE”); // returns dirham
+currencies.size; // returns 5 
+currencies.has(“PK”) // retu	rns true if found 
+currencies.delete(“CA”) // delete Canada from the list
+
+
+
+-------------------------------------------------
+var authenticatorsecrets = new WeakMap();
+
+        function TwitterAuthenticator() {
+             const loginSecret = {
+                apikey: 'testtwitterapikey',
+                secretkey: 'testtwittersecretkey'
+            };
+            authenticatorsecrets.set(this, loginSecret);
+        }
+
+        TwitterAuthenticator.prototype.Authenticate = function () {
+            const loginSecretVal = authenticatorsecrets(this);
+            //to do authenticate with twitter
+        };
+
+
+Sets and Weak Sets
+====================================================
+
+        var set = new Set();
+        set.add(1);
+        set.add("Hello World");
+        set.add(3.4);
+        set.add(new Date());
+
+-----------------------------------------------
+var no = { id: 1 };
+        var abc = { alphabets: ['a', 'b', 'c'] };
+
+        var x = new WeakSet();
+        x.add(no);
+        x.add(abc)      

@@ -1,0 +1,727 @@
+Getting Response Headers
+===============================
+
+var xhr= new XMLHttpRequest();
+function callback(){
+  var arrHeaders = xhr.getAllResponseHeaders();
+      //or
+  var contentType = xhr.getResponseHeader(‘Content-Type’);
+}
+
+
+XHR Events
+===================================
+
+var xhr= new XMLHttpRequest();
+xhr.onreadystatechange = callback;
+
+function callback(){
+	//do something
+}
+
+var xhr = new XMLHttpRequest();
+xhr.timeout = 5000; 
+xhr.ontimeout = timeouthandler;
+function timeouthandler(){
+	//do something
+}
+
+XHR Properties
+======================
+
+Get Response Status
+======================================
+
+@model WebApplication.ViewModels.Book.BookViewModel
+@{
+    ViewData["Title"] = "View";
+}
+<script>
+    var xhr = null;
+    function submit() {
+        xhr = new XMLHttpRequest();
+        xhr.open("POST", '/Book/SaveData');
+        var name = document.getElementById("Name").value;
+        var description = document.getElementById("Description").value;
+        var data =
+        {
+            "Name": name,
+            "Description": description
+        };
+        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+        xhr.onreadystatechange = callback;
+        xhr.send(JSON.stringify(data));
+    }
+
+    function callback() {
+        if (xhr.readyState == 4) {
+            var msg = xhr.responseText;r 
+            document.getElementById("msg").innerHTML = msg;
+            document.getElementById("msgDiv").style.display = 'block';
+        }
+    }
+</script>
+
+
+<form asp-action="SaveData" id="myForm">
+    <p> </p>
+    <div id="msgDiv" style="display:none" class="alert alert-success">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Success!</strong> <label id="msg"></label>
+    </div>
+    <div id="pageDiv" class="container">
+        <br />
+        <div id="mainDiv" class="form-horizontal">
+            <div class="form-group">
+                <label asp-for="Name" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="Name" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description"  class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <textarea asp-for="Description" class="form-control" ></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button id="btnSubmit" onclick="submit()" type="submit" class="btn btn-primary"> Submit</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+---------------------------------------------------------------------------------
+function submit() {
+        xhr = new XMLHttpRequest();
+        xhr.open('POST', '/Book/SaveData');
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        var html = serialize(document.forms[0]);
+        xhr.onreadystatechange = callback;
+        xhr.send(html);
+    }
+
+----------------------------------------------------------------------------
+    [EnableCors("AllowAllOrigins")]
+    public class BookController : Controller
+    {
+        // GET: /<controller>/
+        public IActionResult Index()
+
+
+        {
+            return View();
+        }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+
+        public IActionResult Books()
+        {
+            //if (fromAjax)
+            //{
+                List<BookViewModel> books = new List<BookViewModel>();
+                books.Add(new BookViewModel { Id = 1, Name = "JavaScript for .Net Developers", Description = "Book for .NET Developers" });
+                books.Add(new BookViewModel { Id = 1, Name = "Beginning ASP.NET Core 1.0", Description = "Book for beginners to learn ASP.NET Core 1.0" });
+                books.Add(new BookViewModel { Id = 1, Name = "Mastering Design Patterns", Description = "All about Design Patterns" });
+                return View(books);
+            //}
+            //return Content("Request to this method is only allowed from Ajax");
+        }
+
+
+        public IActionResult RecentBook()
+        {
+            List<BookViewModel> books = new List<BookViewModel>();
+            books.Add(new BookViewModel { Id = 1, Name = "JavaScript for .Net Developers", Description = "Book for .NET Developers" });
+            return View("Books", books);
+        }
+
+
+
+        //[HttpPost]       
+       public IActionResult SaveData(BookViewModel bookViewModel)
+       {
+            //call some service to save data 
+            return Content("Data saved successfully"); 
+       }
+    }
+}
+
+
+------------------------------------------------------------------------
+@model WebApplication.ViewModels.Book.BookViewModel
+@{
+    ViewData["Title"] = "Books";
+}
+<script>
+    var xhr = null;
+    function loadData() {
+        xhr = new XMLHttpRequest();
+        xhr.open('GET', '/Book/Books',true);
+        xhr.onreadystatechange = callback;
+        xhr.send();
+    }
+    function callback() {
+        if (xhr.readyState == 4) {
+            var msg = xhr.responseText;
+            document.getElementById("booksDiv").innerHTML = msg;
+        }
+    }
+</script>
+<div class="container">  
+    <button id="btnLoad" onclick="loadData()" type="submit" class="btn btn-primary">Load</button>
+    <hr />
+    <div id="booksDiv">
+    </div>
+</div>
+
+
+-----------------------------------------------------------------------------
+
+Partial view 
+@{ 
+    Layout = null;
+}
+@model IEnumerable<WebApplication7.ViewModels.Book.BookViewModel>
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('table').on('click','tr', null, function() {
+            $(this).css('background-color', 'aliceblue');
+        });
+    });
+</script>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th></th>
+    </tr>
+    
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+        </td>
+    </tr>
+}
+</table>
+
+Controller code snippet
+==============================
+
+   public class BookController : Controller
+    {
+        // GET: /<controller>/
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+
+        public IActionResult Books()
+        {
+                List<BookViewModel> books = new List<BookViewModel>();
+                books.Add(new BookViewModel { Id = 1, Name = "JavaScript for .Net Developers", Description = "Book for .NET Developers" });
+                books.Add(new BookViewModel { Id = 1, Name = "Beginning ASP.NET Core 1.0", Description = "Book for beginners to learn ASP.NET Core 1.0" });
+                books.Add(new BookViewModel { Id = 1, Name = "Mastering Design Patterns", Description = "All about Design Patterns" });
+                return View(books);
+        }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
+}
+
+
+jQuery.ajax()
+====================================================================
+
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $.ajax('/Book/Books', {
+            success: function (data) {
+                $('#booksDiv').html(data);
+            },
+            error: function (data) {
+                $('#booksDiv').html(data);
+            }
+        });
+    });
+</script>
+
+
+Pre-filtering AJAX requests
+=============================================================================
+
+<script>
+    $(document).ready(function () {
+
+        $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
+            options.url += ((options.url.indexOf('?') < 0) ? '?' : '&')+ 'fromAjax=true';
+        });
+
+        $.ajax('/Book/Books', {
+            success: function (data) {
+                $('#booksDiv').html(data);
+            },
+            error: function (data) {
+                $('#booksDiv').html(data);
+            }
+        });
+    });
+</script>
+---------------------------------------------------------
+
+public IActionResult Books(bool fromAjax)
+        {
+            if (fromAjax)
+            {
+                List<BookViewModel> books = new List<BookViewModel>();
+                books.Add(new BookViewModel { Id = 1, Name = "JavaScript for .Net Developers", Description = "Book for .NET Developers" });
+                books.Add(new BookViewModel { Id = 1, Name = "Beginning ASP.NET Core 1.0", Description = "Book for beginners to learn ASP.NET Core 1.0" });
+                books.Add(new BookViewModel { Id = 1, Name = "Mastering Design Patterns", Description = "All about Design Patterns" });
+                return View(books);
+            }
+            return Content("Request to this method is only allowed from Ajax");
+        }
+
+
+
+Setting Default values for All Future Ajax Request
+==========================================================================
+
+<script>
+    $(document).ready(function () {
+
+        $.ajaxSetup({ url: "/Book/Books"});
+
+        $.ajax({
+            success: function (data) {
+                $('#booksDiv').html(data);
+            },
+            error: function (data) {
+                $('#booksDiv').html(data);
+            }
+        });
+    });
+</script>
+
+Loading Data through Get functions in jQuery
+============================================================================
+
+Using jQuery.get() 
+==================================================
+
+<script>
+    $(document).ready(function () {
+        
+        $.get('/Book/Books', {filter : "net"}, function (data) {
+                $('#booksDiv').html(data);
+            }
+        );
+
+    });
+</script>
+
+Using jQuery.getJSON()
+================================================================
+
+<script>
+    $(document).ready(function () {
+        
+      $.getJSON('/Book/Books', function (data) {
+            $.each(data, function (index, field) {
+                $('#booksDiv').append(field.Name + "<br/> ");
+            });
+        }
+      );
+ </script>
+-------------------------------------------------------------
+
+
+public IActionResult Books()
+{
+    List<BookViewModel> books = new List<BookViewModel>();
+    books.Add(new BookViewModel { Id = 1, Name = "JavaScript for .Net Developers", Description = "Book for .NET Developers" }
+    books.Add(new BookViewModel { Id = 1, Name = "Beginning ASP.NET Core 1.0", Description = "Book for beginners to learn ASP.NET Core 1.0" });
+    books.Add(new BookViewModel { Id = 1, Name = "Mastering Design Patterns", Description = "All about Design Patterns" });
+    return Json(books);
+            
+}
+
+Using jQuery.getScript()
+===========================================================================
+
+<script>
+    $(document).ready(function () {
+        
+    $.getScript("/wwwroot/js/custom.js");
+</script>
+
+Posting Data to Server using Post function
+=========================================================================
+
+<script>
+
+    function submit() {
+        $.post('/Book/SaveData', $("form").serialize(), function (data) {
+            alert("form submitted");
+
+        });
+    }
+</script>
+
+-----------------------------------------------------------------------
+
+public IActionResult SaveData(BookViewModel bookViewModel)
+{
+  //call some service to save data 
+  return Content("Data saved successfully")
+}
+
+------------------------------------------------------------------------
+<script>
+    function submit() {
+        $.post('/Book/SaveData', {Name:"Design Patterns", Description: "All about design patterns"}, function (data) {
+        },'json' );
+    }
+</script>
+
+Global Events 
+======================================================
+
+@model WebApplication.ViewModels.Book.BookViewModel
+@{
+    ViewData["Title"] = "Books";
+}
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.0.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+
+        $(document).ajaxComplete(function (e) {
+            alert("Ajax request completed");
+        }).ajaxSend(function () {
+            alert("Ajax request sending");
+        }).ajaxSend(function () {
+            alert("Ajax request sent to server");
+        }).ajaxStop(function () {
+            alert("Ajax request stopped");
+        }).ajaxError(function () {
+            alert("Some error occured in Ajax request");
+        }).ajaxSuccess(function () {
+            alert("Ajax request was successfull");
+        })
+        $('#btnLoad').click(function(){
+            $.ajax('/Book/Books', {
+                success: function (data) {
+                            $('#booksDiv').html(data);
+                        },
+                        error: function (data) {
+                            $('#booksDiv').html(data);
+                        }
+                    });
+
+        });
+
+
+    });
+</script>
+<div class="container">
+    <br />
+    <h4>Books View</h4>
+    <h5>Click on the button to load all the books</h5>
+    <button id="btnLoad" type="submit" class="btn btn-primary">Load</button>
+    <hr />
+    <div id="booksDiv">
+    </div>
+</div>
+
+Cross Origin Requests 
+========================================================================
+
+JSON-P
+========================================================================
+
+<script>
+            var scrpt = document.createElement('script');
+
+            scrpt.setAttribute('src',' http://dev.virtualearth.net/REST/v1/Locations/latitudeNo,longitudeNo?o=json&key=BingMapsKey);
+            document.body.appendChild(scrpt);
+            function jsonCallback(data) {
+                alert("Cross Origin request got made");
+            }
+</script>
+
+---------------------------------------------------------------
+
+$.ajax({
+            url: serviceURL,
+            type: "GET",
+            dataType: "jsonp",
+            method:"GetResult",
+	    crossDomain: true,
+            error: function () {
+                alert("list failed!");
+            },
+            success: function (data) {
+                alert(data);
+            }
+        });
+
+
+Specifying CORS Policy at Services Level
+=========================================================================
+
+public void ConfigureServices(IServiceCollection services)
+{       
+services.AddCors(options => {
+                options.AddPolicy("AllowAllOrigins", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            });
+
+}
+
+------------------------------------------------------------------------------
+public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory
+{
+
+            app.UseCors("AllowAllOrigin");
+}
+
+----------------------------------------------------------------------------------
+public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddCors(options => {
+                options.AddPolicy("AllowAllOrigins", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+                options.AddPolicy("AllowOnlyGet", builder => builder.WithMethods("GET").AllowAnyHeader().AllowAnyOrigin());
+            });
+
+
+Enable CORS at Configure Method
+=======================================================================================
+
+
+public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+{
+app.UseCors(policyBuilder => policyBuilder.WithHeaders("accept,content-type").AllowAnyOrigin().WithMethods("GET, POST"));
+}
+
+
+
+Enabling CORS at Controller Level
+==========================================================================================
+
+[EnableCors("AllowAllOrigins")]
+public class BookController : Controller
+{
+    //to do
+}
+
+
+
+Enabling CORS at Action Level
+==============================================================================================
+
+[EnableCors("AllowAllOrigins")]
+   public IActionResult GetAllRecords(
+   {
+			//Call some service to get records
+			return View();
+}
+
+
+Enabling CORS Globally
+=============================================================================================
+
+public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddCors(options => {
+                options.AddPolicy("AllowAllOrigins", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+                options.AddPolicy("AllowOnlyGet", builder => builder.WithMethods("GET").AllowAnyHeader().AllowAnyOrigin());
+            });
+
+            services.Configure<MvcOptions>(options =>
+            {
+                options.Filters.Add(new CorsAuthorizationFilterFactory("AllowOnlyGet"));
+            });
+}
+
+
+Calling WCF Services from JavaScript
+============================================
+
+ [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "json/{productCode}")]
+        Product GetProduct(string productCode);
+        
+We can also represent the same method using WebInvoke as shown below
+[OperationContract]
+        [WebInvoke(Method ="GET",  ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "products/{productCode}")]
+        Product GetProduct(string productCode);
+
+
+-------------------------------------------------------
+
+
+    [OperationContract]
+        [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "products /SaveProduct")]
+        bool SaveProduct(Product product);
+
+
+
+Save Product
+-------------------------------------------
+
+function SaveProduct(){
+        var product = {
+            "ProductName":"Product1",
+            "ProductDescription":"This is Product A"
+        };
+        
+	
+        $.ajax({
+            type:"POST",
+            url:"http://localhost/products/SaveProduct",
+            data:JSON.stringify(product),
+            contentType: "application/json",
+            dataType:"json",
+            processData:true,
+            success: function(data, status, xhr){
+                alert(data);
+            
+            },
+            error: function(error){
+                alert(error);
+            
+            }
+        
+        });
+    }
+
+
+
+Save product for Cross origin
+-----------------------------------------
+
+function SaveProduct(){
+        var product = {
+            "ProductName":"Product1",
+            "ProductDescription":"This is Product A"
+        };
+        
+	
+        $.ajax({
+            type:"POST",
+            url:" http://localhost:4958/ProductService.svc/products/SaveProduct?callback=?",
+            data:JSON.stringify(product),
+            contentType: "application/json",
+            dataType:"jsonp",
+   		     crossDomain: true,	 
+            processData:true,
+            success: function(data, status, xhr){
+                alert(data);
+            
+            },
+            error: function(error){
+                alert(error);
+            
+            }
+        
+        });
+    }
+
+
+GetProduct
+------------------------------------------------------
+(function () {
+		  var productCode= "Prod-001";
+		  var webServiceURL = "http://localhost:4958/ProductService.svc/products/GetProduct/"+productCode;
+        $.ajax({
+            type: "GET",
+            url: webServiceURL,
+            dataType: "json",
+            processData: false,
+            success: function (data) {
+                alert(data);
+            },
+            error: function (error) {
+                alert(error);
+            }
+        });
+    });
+
+
+Get Product for Cross Origin
+-------------------------------------------------
+
+
+(function () {
+		  var productCode= "Prod-001";
+		  var webServiceURL = "http://localhost:4958/ProductService.svc/products/GetProduct/"+productCode;
+        $.ajax({
+            type: "GET",
+            url: webServiceURL+"?callback=?",
+            dataType: "jsonp",
+            crossDomain:true,     
+            processData: false,
+            success: function (data) {
+                alert(data);
+            },
+            error: function (error) {
+                alert(error);
+            }
+        });
+    });
+
+
+
+With JSONPCallback attribute
+------------------------------------
+
+function callbackFn(data){
+       
+}
+
+      (function () {
+		  var productCode= "Prod-001";
+		  var webServiceURL = "http://localhost:4958/ProductService.svc/products/GetProduct/"+productCode;
+        $.ajax({
+            type: "GET",
+            url: webServiceURL,
+            dataType: "jsonp",
+            crossDomain:true,     
+            processData: false,
+            jsonpCallback: callbackFn,
+            success: function (data) {
+                alert(data);
+            },
+            error: function (error) {
+                alert(error);
+            }
+        });
+    });

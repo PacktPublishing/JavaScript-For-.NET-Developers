@@ -1,0 +1,721 @@
+Using WinJS in Asp.NET Application
+===============================================
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="lib/winjs/js/base.js"></script>
+    <script src="lib/winjs/js/ui.js"></script>
+    <script src="lib/winjs/js/winjs.intellisense-setup.js"></script>
+    <script src="lib/winjs/js/winjs.intellisense.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.0.js"></script>
+    <link rel="stylesheet" href="lib/winjs/css/ui-dark.css" />
+</head>
+<body>    
+    <div class="win-container">
+        <button class="win-button" id="btn">Show</button>
+        <span id="txtMessage"></span>
+    </div>
+    <script>
+        (function () {
+            WinJS.UI.processAll().done(function () {
+                $('#btn').click(function () {
+                    $('#txtMessage').text("You have clicked!");
+                });
+            });
+        })();
+    </script>
+</body>
+</html>
+
+----------------------------------------------------------------
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>App1</title>
+
+    <!-- WinJS references -->
+    <link href="WinJS/css/ui-dark.css" rel="stylesheet" />
+    <script src="WinJS/js/base.js"></script>
+    <script src="WinJS/js/ui.js"></script>
+
+    <!-- App1 references -->
+    <link href="/css/default.css" rel="stylesheet" />
+    <script src="/js/default.js"></script>
+</head>
+<body class="win-type-body">
+    <p>Content goes here</p>
+</body>
+</html>
+------------------------------------------------------------------
+ (function () {
+	"use strict";
+
+	
+	var app = WinJS.Application;
+	var activation = Windows.ApplicationModel.Activation;
+
+	app.onactivated = function (args) {
+		if (args.detail.kind === activation.ActivationKind.launch) {
+			if (args.detail.previousExecutionState !== activation.ApplicationExecutionState.terminated) {
+			} else {
+			}
+			args.setPromise(WinJS.UI.processAll());
+		}
+	};
+
+	app.oncheckpoint = function (args) {
+	};
+
+	app.start();
+})();
+
+Defining Classes in WinJS
+====================================================================
+
+<script>
+        var Logger = WinJS.Class.define(function (value) {
+            //constructor
+            console.log("Constructor is executing, value passed is: " + value );
+        }     
+        );
+	 //Initializing Logger class object    
+    var log = new Logger("Hello World");
+</script>
+
+------------------------------------------------------------------
+<script>
+        var Logger = WinJS.Class.define(function (value) {
+               this.logName = value;
+               this.enabled;
+			   //constructor
+            console.log("Constructor is executing, value passed is " + value );
+        }, {
+            logMessage: function (message) {
+                if (this.logEnabled) {
+                    alert("The message is" + message);
+                }
+            },
+  logEnabled: {
+                 get: function () { return this.enabled; },
+                 set: function (value) { this.enabled = value; }
+             }
+        }
+        );
+
+       var log = new Logger("Sample log");
+  		 log.logEnabled = true;
+       log.logMessage(“Hello World”);
+<script>
+
+--------------------------------------------------------------
+logMessage: function (message) {
+              alert("The message is" + message);
+       }
+--------------------------------------------------------------
+logEnabled: {
+                get: function () { return this.enabled; },
+                set: function (value) { this.enabled = value; }
+            }
+
+
+-------------------------------------------------------------
+  logEnabled: {
+                get: function () { return this.enabled; },
+                set: function (value) { this.enabled = value; }
+             },
+
+            logType: {
+                get: function () { return this.loggerType; },
+                set: function (value) { this.loggerType = value;}
+            }
+
+Deriving Classes in WinJS
+==================================================================
+
+<script>
+        var BaseLogger = WinJS.Class.define(function (logName) {
+            this.enabled;
+            this.loggerType;
+            this.loggerName = logName;
+        }, {
+            logEnabled: {
+                get: function () { return this.enabled; },
+                set: function (value) { this.enabled = value; }
+            },
+
+            logType: {
+                get: function () { return this.loggerType; },
+                set: function (value) { this.loggerType = value; }
+            }
+        });
+
+        var Logger = WinJS.Class.derive(BaseLogger, function (logName) {
+            //calling base constructor and passing the LogName to the base constructor
+            BaseLogger.call(this, logName);
+        },
+        {
+            logMessage: function (message) {
+                if (Object.getOwnPropertyDescriptor(BaseLogger.prototype, "logEnabled").get.call(this) == true) {
+                    alert("The message is " + message);
+                }
+            },
+            
+        }
+        );
+
+        var log = new Logger("Hello World");
+        log.logEnabled = true;
+        log.logType = "Alert";
+        log.logMessage("hello");
+</script>
+
+--------------------------------------------------------
+
+Object.getOwnPropertyDescriptor(BaseLogger.prototype, "logEnabled").get.call(this)
+
+----------------------------------------------------------
+Object.getOwnPropertyDescriptor(BaseLogger.prototype, "logEnabled").set.call(this) = true;
+
+
+-----------------------------------------------------------
+BaseLogger.prototype.logMessage.call(this);
+
+Namespaces in WinjS
+================================================================
+
+WinJS.Namespace.define("DemoApp.Utilities", {
+            //BaseLogger class
+            BaseLogger: WinJS.Class.define(function (logName) {
+                this.enabled;
+                this.loggerType;
+                this.loggerName = logName;
+            }, {
+                logEnabled: {
+                    get: function () { return this.enabled; },
+                    set: function (value) { this.enabled = value; }
+                },
+
+                logType: {
+                    get: function () { return this.loggerType; },
+                    set: function (value) { this.loggerType = value; }
+                },
+            }),
+
+            //Logger class
+            Logger: WinJS.Class.derive(BaseLogger, function (logName) {
+                //calling base constructor and passing the LogName to the base constructor
+                BaseLogger.call(this, logName);
+            },
+            {
+                logMessage: function (message) {
+                    if (Object.getOwnPropertyDescriptor(BaseLogger.prototype, "logEnabled").get.call(this) == true) {
+                        alert("The message is " + message);
+                    }
+                },
+
+            })
+        });
+
+--------------------------------------------------------------------------
+var log = new DemoApp.Utilities.Logger("Sample Logger");
+        log.logEnabled = true;
+        log.logType = "Alert";
+        log.logMessage("hello");
+
+Mixin
+===========================================================================
+
+ var logMixin = {
+     logMessage: function (message) {
+                alert(message);
+            }
+        };
+
+        var SampleClass = WinJS.Class.define(function(){
+
+        });
+
+        WinJS.Class.mix(SampleClass, logMixin);
+
+        var sample = new SampleClass();
+        
+        sample.logMessage(“Mixin");
+
+-------------------------------------------------------------
+      //First Mixin
+        var logMixin = {
+            logMessage: function (message) {
+                alert(message);
+            }
+        };
+
+        //Second Mixin
+        var logConsoleMixin = {
+            logMessage: function (message) {
+                console.log(message);
+            }
+        }
+
+        //Class
+        var SampleClass = WinJS.Class.define(function () {
+
+        },
+
+        logMessage= function(message){
+        var result = confirm(message);
+        });
+
+        
+        WinJS.Class.mix(SampleClass, logMixin, logConsoleMixin);
+
+        var sample = new SampleClass();
+        sample.logMessage("Mixin");
+
+
+Events in WinJS
+====================================================================
+
+   var SampleClass = WinJS.Class.define(function () {
+        },
+        {
+            execute: function(message){
+                this.dispatchEvent("executeInvoked", { message: "Executed"      });
+            }
+        });
+ 
+-----------------------------------------------------------
+       var sampleClass = new SampleClass();
+        var sampleEventHandler = function (event) {
+
+            alert(event.detail.message);
+        };
+        sampleClass.addEventListener("executeInvoked", sampleEventHandler);
+        
+        sampleClass.execute("hello");       
+
+
+Data Binding
+===============================================================
+
+One Time databinding
+===============================================================
+
+<div id="rootDiv">
+        <div> Course Name:
+            <span id="divForm" data-win-bind="innerText: name">loading</span>
+        </div>
+        <div>
+            Course Description:
+            <span id="divForm" data-win-bind="innerText: description">loading</span>
+        </div>
+    </div>
+
+------------------------------------------------------------------
+let ViewModel = WinJS.Class.define(function () {
+                this.nameProp;
+                this.descProp;
+            },
+            {
+                name: {
+                    get: function () { return this.nameProp; },
+                    set: function (value) { this.nameProp = value; }
+                },
+                description: {
+                    get: function () { return this.descProp; },
+                    set: function (value) { this.descProp = value; }
+                }
+            });
+
+            let viewModel = new ViewModel();
+            viewModel.name = "WinJS databinding";
+            viewModel.description = "Introduction to WinJS databinding";
+            var personDiv = document.querySelector('#rootDiv');
+            WinJS.Binding.processAll(personDiv, viewModel);
+
+
+
+One Way databinding
+===================================================================
+
+//HTML markup
+<button id="btnUpdate">Click</button>
+
+//JavaScript
+   let ViewModel = WinJS.Class.define(function () {
+	                    this.nameProp;
+	                    this.descProp;
+           },
+           {
+ name: {
+    get: function () { return this.nameProp; },
+    set: function (value) { this.nameProp = value; }
+        },
+ description: {
+    get: function () { return this.descProp; },
+    set: function (value) { this.descProp = value; }
+        }
+ });
+
+let viewModel = new ViewModel();
+viewModel.name = "WinJS databinding";
+viewModel.description = "Introduction to WinJS databinding";
+var personDiv = document.querySelector('#rootDiv');
+
+let observableViewModel = WinJS.Binding.as(viewModel);
+
+   WinJS.Binding.processAll(personDiv, observableViewModel);
+
+document.querySelector('#btnUpdate').onclick = function () {
+   observableViewModel.name = "new name";
+	observableViewModel.description =”new description”;
+}
+
+
+Two way databinding
+=================================================================
+
+someTextboxElement.onpropertychange=function(){
+			someModel.property = someTextboxElement.value;
+}
+
+
+-----------------------------------------------------------------
+
+
+<input type="text" data-win-bind="value: someProperty Binding twoWayBinding" />
+
+
+------------------------------------------------------------------
+
+
+//Defining Binding initializer to support two way binding
+WinJS.Namespace.define("Binding.Mode", {
+	    twoway: WinJS.Binding.initializer(function 
+                        (source, sourceProperties, destination, destinationProperties) {
+	        WinJS.Binding.defaultBind(source, sourceProperties, destination, destinationProperties);
+	        destination.onchange = function () {
+	            var destValue = destination[destinationProperties[0]];
+	            source[sourceProperties[0]] = destValue;
+	        }
+	    })
+	});
+
+
+------------------------------------------------------------------------
+
+//Defining class
+let ViewModel = WinJS.Class.define(function () {
+	                    this.nameProp;
+	                    this.descProp;
+	                },
+{
+name: {
+get: function () { return this.nameProp; },
+set: function (value) { this.nameProp = value; }
+},
+description: {
+get: function () { return this.descProp; },
+set: function (value) { this.descProp = value; }
+}
+});
+
+//Initializing class Instance
+let viewModel = new ViewModel();
+viewModel.name = "WinJS databinding";
+viewModel.description = "Introduction to WinJS databinding";
+
+var rootDiv = document.querySelector('#rootDiv');
+let observableViewModel = WinJS.Binding.as(viewModel);
+WinJS.Binding.processAll(rootDiv, observableViewModel);
+                                       
+-------------------------------------------------------------------------------------
+
+<div id="rootDiv">
+            <div
+ <input type="text" data-win-bind="value: name Binding.twoWayBinding" />
+            </div>
+            <div>
+                Course Name:
+                <span id="spanName" data-win-bind="innerText: name">loading</span>
+            </div>
+            <div>
+<input type="text" data-win-bind="value: description Binding.twoWayBinding" />
+            </div>
+            <div>
+                Course Description:
+                <span id="spanDesc" data-win-bind="innerText: description">loading</span>
+            </div>
+            </div>
+
+Promises
+====================================================================================
+
+var promise = new WinJS.Promise(function (completed, error, progress)
+
+//Call if we need to update consumer that still in progress
+progress("progress");
+
+//Call if any error occurs
+error("error");
+
+//Call when the function is completed
+completed("completed");
+}
+);
+
+-----------------------------------------------------------------------------------------
+promise.then(
+function () { console.log("completed"); }, 
+function () { console.log("error") }, 
+function () { console.log("promise") }
+);
+
+
+-----------------------------------------------------------------------------------------
+
+function executeTable(table, max)
+{
+  return new WinJS.Promise(function(completed, error, progress){
+  for (i = 1; i < max; i++) {
+     console.log(table +' X '+ i +' = ' + (table * i ));
+  }
+  completed("executed table")
+ });
+ };
+
+  executeTable(2, 10).then(
+            function (completedVal) {
+                    console.log(completedVal);
+             }, function (errorVal) {
+                    console.log(errorVal);
+             },
+             function (onProgressVal) {
+                    console.log(onProgressVal);
+             }
+
+   )
+
+---------------------------------------------------------------------------------------------
+function executeTable(table, max)
+            {
+                return new WinJS.Promise(function (completed, error, onProgress) {
+                    window.setImmediate(function () {
+                        for (i = 1; i <= max; i++) {
+                            var row = table + ' X ' + i + ' = ' + (table * i);
+                            onProgress(row);
+                        }
+                        completed("executed table")
+                    }, 0);
+                });
+            }; 
+
+  executeTable(2, 10).then(
+            function (completedVal) {
+                    console.log(completedVal);
+             }, function (errorVal) {
+                    console.log(errorVal);
+             },
+             function (onProgressVal) {
+                    console.log(onProgressVal);
+             }
+
+   )
+
+Chaining Promises and Handling Errors
+=========================================================================================
+
+var promise1 = function () { return WinJS.xhr({ url: "http://microsoft.com" }) };
+            var promise2 = function () { return WinJS.xhr({ url: "http://google.com" }) };
+            var promise3 = function () { return WinJS.xhr({ url: "http://techframeworx.com" }) };
+            var promise4 = function () { return WinJS.xhr({ url: "http://msdn.microsoft.com" }) };
+
+            promise1().then(function (dataPromise1) {
+                console.log("got the response from promise 1");
+                return promise2();
+            }).then(function (dataPromise2) {
+                console.log("got the response from promise 2");
+                return promise3();
+            }).then(function (dataPromise3) {
+                console.log("got the response from promise 3");
+                return promise4();
+            }).done(function (dataPromise4) {
+                console.log("got the response from promise4");
+                console.log("completed the promise chain");
+            });
+
+
+---------------------------------------------------------------------------------------
+
+var promise1 = function () { return WinJS.xhr({ url: "http://microsoft.com" }) };
+            var promise2 = function () { return WinJS.xhr({ url: "http://googe.com" }) };
+            var promise3 = function () { return WinJS.xhr({ url: "htt://techframeworx.com" }) };
+            var promise4 = function () { return WinJS.xhr({ url: "http://msdn.microsoft.com" }) };
+
+            promise1().then(function (dataPromise1) {
+                console.log("got the response from promise 1");
+                return promise2();
+            }).then(function (dataPromis2) {
+                console.log("got the response from promise 2");
+                return promise3();
+            }).then(function (dataPromise3) {
+                console.log("got the response from promise 3");
+                return promise4();
+            }).done(function (dataPromise4) {
+                console.log("got the response from promise4");
+                console.log("completed the promise chain");
+            }, function (error) {
+                console.log("some error occurred, cause: " + error);
+            });
+
+
+Cancelling Promise
+=====================================================================================
+
+var promiseGoogle = function () { return WinJS.xhr({ url: "http://google.com" }) };
+            googlePromiseObj = promiseGoogle();
+            googlePromiseObj.cancel();
+
+
+Joining Promise
+=======================================================================================
+
+   var promise1 = function () { return WinJS.xhr({ url: "http://microsoft.com" }) };
+            var promise2 = function () { return WinJS.xhr({ url: "http://googe.com" }) };
+            var promise3 = function () { return WinJS.xhr({ url: "http://techframeworx.com" }) };
+WinJS.Promise.join([promise1, promise2, promise3])
+.done(function(){
+	console.log(“All the promises are finished”);
+});
+
+------------------------------------------------------------------------------------
+var promise1 = function () { return WinJS.xhr({ url: "http://microsoft.com" }) };
+var promise2 = function () { return WinJS.xhr({ url: "http://googe.com" }) };
+var promise3 = function () { return WinJS.xhr({ url: "http://techframeworx.com" }) };
+WinJS.Promise.any([promise1, promise2, promise3])
+.done(function(){
+	console.log(“All the promises are finished”);
+});
+
+Checking Promise
+==========================================================================================
+
+WinJS.Promise.is(WinJS.xhr({ url: "http://microsoft.com" }));
+
+Wrapping Non-Promise into Promise
+===========================================================================================
+
+function displayMessage() {
+
+                console.log("This is a non promise function")
+            }
+            var promiseDisplayMessage = WinJS.Promise.as(displayMessage);
+            promiseDisplayMessage.done(function () { console.log("promise is executed") });
+
+
+
+Adding WinJS Control
+===================================================================================
+
+<button data-win-control="WinJS.UI.BackButton">WinJS button</button>
+
+
+Settings Properties of WinJS Controls
+===================================================================================
+
+<div id="ratingControl" data-win-control="WinJS.UI.Rating"
+         data-win-options="{minRating: 1, averageRating : 5, maxRating: 10}"></div>
+
+
+
+
+Creating the ASP.NET Core application
+===================================================================================
+
+{
+  "version": "1.0.0",
+  "name": "ASP.NET",
+  "private": true,
+  "dependencies": {
+    "winjs": "4.4.0"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1"
+  }
+   }
+
+
+--------------------------------------------------------------------------------
+/// <binding Clean='clean' />
+"use strict";
+var gulp = require("gulp");
+var paths = {
+    webroot: "./wwwroot/"
+};
+var config = {
+    libBase: 'node_modules',
+    lib: [
+       require.resolve('winjs/js/base.js'),
+       require.resolve('winjs/js/ui.js'),
+       require.resolve('winjs/js/winjs.intellisense.js'),
+       require.resolve('winjs/js/winjs.intellisense-setup.js')
+    ],
+    libCss: [require.resolve('winjs/css/ui-dark.css'),
+        require.resolve('winjs/css/ui-light.css')
+    ]
+};
+gulp.task('build.lib', function () {
+    return gulp.src(config.lib, { base: config.libBase })
+    .pipe(gulp.dest(paths.webroot + 'lib'));
+});
+gulp.task('build.libCss', function () {
+    return gulp.src(config.libCss, { base: config.libBase })
+    .pipe(gulp.dest(paths.webroot + "lib"));
+});
+
+----------------------------------------------------------------------------------------
+  <script src="lib/winjs/js/base.js"></script>
+    <script src="lib/winjs/js/ui.js"></script>
+    <script src="lib/winjs/js/winjs.intellisense-setup.js"></script>
+    <script src="lib/winjs/js/winjs.intellisense.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.0.js"></script>
+
+
+---------------------------------------------------------------------------------------
+  <div id="rootDiv">
+        <div class="col-md-4">
+           Click to capture image <input type="button" value="Capture" onclick="return CaptureCamera();" />
+        </div>
+        <br />
+        <img id="imgPhoto" width="500" height="500" style="border:dotted;"  />
+     </div>
+
+--------------------------------------------------------------------------------------------
+    <script>
+            if (window.Windows) {
+                function CaptureCamera() {
+                    var notifications = Windows.UI.Notifications;
+                    var dialog = new Windows.Media.Capture.CameraCaptureUI();
+                    var aspectRatio = { width: 1, height: 1 };
+                    dialog.photoSettings.croppedAspectRatio = aspectRatio;
+                    dialog.captureFileAsync(Windows.Media.Capture.CameraCaptureUIMode.photo).done(function (capturedImage) {
+                        if (capturedImage) {
+                            var imageURL = URL.createObjectURL(capturedFile, { oneTimeOnly: true });
+                            document.getElementById("img").src = imageURL;
+                        }
+                        else {
+                            WinJS.log && WinJS.log("No image captured yet", "WinJSTestApp", "Status");
+                        }
+                    }, function (err) {
+                        WinJS.log && WinJS.log(err, "WinJSTestApp", "Error");
+                    });
+                }
+            } else {
+                function CaptureCamera() {
+                    alert("Cannot access camera, it should be hosted as a windows application");
+                }
+            }
+    </script>

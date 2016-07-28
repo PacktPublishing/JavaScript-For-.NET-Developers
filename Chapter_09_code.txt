@@ -1,0 +1,90 @@
+Implementing Module Pattern
+================================
+
+<script>
+  var Logger= (function () {
+       
+        //private method
+        var formatMessage = function (message) {
+            return message + " logged at: " + new Date();
+        }
+            
+        return {
+            //public method
+            logMessage: function (message) {
+                console.log(formatMessage(message));
+            }
+       };
+
+    })();
+
+    Logger.logMessage("hello world");
+</script>
+ 
+---------------------------------------------
+<script> 
+       var Logger= (function () {
+  		  //private variable
+        var loggerName = "AppLogger";
+
+        //private method
+        var formatMessage = function (message) {
+            return message + " logged at: " + new Date();
+        }
+
+ //private method
+        var logMessage= function (message){
+            console.log(formatMessage(message));      
+        }
+
+		 //private method
+        var showAlert = function(message){
+            alert(formatMessage(message));
+        }
+            
+        return {
+
+            //public methods and variable
+            logConsoleMessage: logMessage,
+            showAlertMessage: showAlert,
+  			  loggerName: loggerName
+        };
+
+    })();
+
+
+    Logger.logConsoleMessage("Hello World");
+    Logger.showAlertMessage("Hello World");
+    console.log(Logger.loggerName);
+</script>
+
+
+Modularizing JavaScript code through RequireJS
+==================================================
+
+define(function (require, exports, module) {
+    //require to use any existing module
+    var utility = require('utility');
+
+    //exports to export values
+    exports.example ="Common JS";
+
+    //module to export values 
+    module.exports.name = "Large scale applications";
+
+    module.exports.showMessage = function (message) {
+  alert(utility.formatMessage(message));
+    }
+});
+
+-------------------------------------
+define(['utility'], function (utility) {
+    return {
+        example: "AMD",
+        name: "Large scale applications",
+        showMessage: function () {
+    alert(utility.formatMessage(message));
+        }
+    }
+
+});
